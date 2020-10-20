@@ -1,0 +1,41 @@
+{% extends 'bootstrap4/bootstrap4.html' %}
+{% load i18n static bootstrap4 django_bootstrap_breadcrumbs %}
+
+{% block bootstrap4_extra_head %}
+{{ block.super }}
+
+{% endblock %}
+
+{% block bootstrap4_extra_script %}
+{{ block.super }}
+
+{% endblock %}
+
+{% block bootstrap4_title %}Restic GUI{% endblock %}
+
+{% block bootstrap4_content %}
+
+<!-- Content -->
+<div class="container" id="id_content">
+
+    <div class="row">
+        <div class="col-12">
+            {% block breadcrumbs %}
+            {% endblock %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <h3 class="title">{% block title %}{% endblock %}</h3>
+            <hr class="narrow" />
+            {% render_breadcrumbs %}
+            {% bootstrap_messages %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+</div>
+<!-- END Content -->
+
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load i18n static bootstrap4 django_bootstrap_breadcrumbs %}
+
+{% block bootstrap4_extra_head %}
+{{ block.super }}
+{% endblock %}
+
+{% block bootstrap4_extra_script %}
+{{ block.super }}
+{% endblock %}
+
+{% block title %}{% trans 'Snapshots of' %} {{ object.name }}{% endblock %}
+
+{% block breadcrumbs %}
+    {% breadcrumb "Home" "/" %}
+    {% breadcrumb object.name 'repo:detail' object.id %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+
+        <div id="snapshots">
+
+            {% for snap in snapshots %}
+            <div class="card">
+                <div class="card-header">
+                    <a class="card-link" data-toggle="collapse" href="#id_{{ snap.short_id }}">
+                        {{ snap.timestamp|date:"DATETIME_FORMAT" }}
+                    </a>
+                    <br/>
+                    <small>
+                        {% trans 'ID' %}: {{ snap.short_id }} &bull;
+                        {% trans 'User' %}: {{ snap.username }} &bull;
+                        {% trans 'Host' %}: {{ snap.hostname }}
+                    </small>
+                </div>
+                <div id="id_{{ snap.short_id }}" class="collapse" data-parent="#snapshots">
+                    {% for path in snap.paths %}
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <a href="{% url 'repository:browse' object.id %}?id={{ snap.short_id }}&path={{ path }}">
+                                {{ path }}
+                            </a>
+                        </li>
+                    </ul>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}

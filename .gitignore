@@ -1,0 +1,13 @@
+.idea/
+media/
+__pycache__/
+localsettings.py
+.vscode
+*.pyc
+log/
+fixtures/
+db.*
+*.db
+.project
+_versions/
+

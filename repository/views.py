@@ -3,8 +3,10 @@ import os
 import subprocess
 from types import SimpleNamespace
 
+from bootstrap_modal_forms.generic import BSModalFormView
 from dateutil.parser import parse
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, FormView
 from django.utils.translation import gettext_lazy as _
@@ -14,7 +16,7 @@ from repository.forms import RestoreForm
 from repository.models import Repository, CallStack
 
 
-class RepositoryList(ListView):
+class RepositoryList(LoginRequiredMixin, ListView):
     model = Repository
 
     def get(self, request, *args, **kwargs):
@@ -22,7 +24,7 @@ class RepositoryList(ListView):
         return super(RepositoryList, self).get(request, *args, **kwargs)
 
 
-class RepositorySnapshots(DetailView):
+class RepositorySnapshots(LoginRequiredMixin, DetailView):
     model = Repository
     template_name = 'repository/repository_snapshots.html'
 
@@ -46,7 +48,7 @@ class RepositorySnapshots(DetailView):
         return ctx
 
 
-class FileBrowse(DetailView):
+class FileBrowse(LoginRequiredMixin, DetailView):
     model = Repository
     template_name = 'repository/file_browse.html'
 
@@ -92,9 +94,9 @@ class FileBrowse(DetailView):
         return ctx
 
 
-class RestoreView(FormView):
+class RestoreView(LoginRequiredMixin, BSModalFormView):
     form_class = RestoreForm
-    template_name = 'repository/restore.html'
+    template_name = 'repository/restore_modal.html'
     success_url = '/'
 
     def get(self, request, *args, **kwargs):
@@ -147,7 +149,7 @@ class RestoreView(FormView):
         return super(RestoreView, self).form_valid(form)
 
 
-class BackupView(DetailView):
+class BackupView(LoginRequiredMixin, DetailView):
     model = Repository
 
     def get_success_url(self):
@@ -156,12 +158,9 @@ class BackupView(DetailView):
     def get(self, request, *args, **kwargs):
         short_id = self.request.GET.get('id', None)
         path = self.request.GET.get('path', None)
-        print(short_id, path)
 
         # backup path
-        #restic -r ~/backup/test2 backup ~/backup-test
         repo = self.get_object()
-        print(repo)
         my_env = os.environ.copy()
         my_env["RESTIC_PASSWORD"] = repo.password
         result = subprocess.run(

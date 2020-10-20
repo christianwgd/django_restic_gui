@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'repository',
     'django_restic_gui',
+    'bootstrap_modal_forms',
     'django_bootstrap_breadcrumbs',
     'bootstrap4',
 ]

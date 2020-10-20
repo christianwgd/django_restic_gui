@@ -8,6 +8,7 @@ from dateutil.parser import parse
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
+from django.urls import reverse
 from django.views.generic import ListView, DetailView, FormView
 from django.utils.translation import gettext_lazy as _
 
@@ -84,8 +85,9 @@ class FileBrowse(LoginRequiredMixin, DetailView):
                     else:
                         pass
             except:
-                import traceback
-                traceback.print_exc()
+                # import traceback
+                # traceback.print_exc()
+                pass
 
         ctx['snapshot'] = snapshot
         ctx['path_list'] = pathlist
@@ -100,7 +102,6 @@ class RestoreView(LoginRequiredMixin, BSModalFormView):
     success_url = '/'
 
     def get(self, request, *args, **kwargs):
-        request.session['referer'] = request.META.get('HTTP_REFERER')
         request.session['repo_id'] = kwargs.get('pk', None)
         request.session['snapshot_id'] = request.GET.get('id', None)
         request.session['source_path'] = request.GET.get('path', None)
@@ -115,38 +116,44 @@ class RestoreView(LoginRequiredMixin, BSModalFormView):
         return initial
 
     def get_success_url(self):
-        return self.request.session['referer']
+        rev_url = reverse('repository:browse', kwargs={'pk': self.request.session['repo_id']})
+        source_path = self.request.session['source_path']
+        parts = source_path.split('/')
+        url = '{url}?id={id}&path={path}'.format(
+            url=rev_url,
+            id=self.request.session['snapshot_id'],
+            path='/'.join(parts[:-1])
+        )
+        return url
 
     def form_valid(self, form):
 
-        if 'cancel' in self.request.POST:
-            return redirect(self.get_success_url())
+        if not self.request.is_ajax():
+            snapshot_id = self.request.session['snapshot_id']
+            source_path = self.request.session['source_path']
+            dest_path = form.cleaned_data['path']
 
-        snapshot_id = self.request.session['snapshot_id']
-        source_path = self.request.session['source_path']
-        dest_path = form.cleaned_data['path']
+            # restore to path
+            repo = Repository.objects.get(pk=self.request.session['repo_id'])
+            my_env = os.environ.copy()
+            my_env["RESTIC_PASSWORD"] = repo.password
 
-        # restore to path
-        repo = Repository.objects.get(pk=self.request.session['repo_id'])
-        my_env = os.environ.copy()
-        my_env["RESTIC_PASSWORD"] = repo.password
+            result = subprocess.run(
+                [
+                    'restic', '-r', repo.path, 'restore', snapshot_id,
+                    '--include', source_path, '--target', dest_path
+                ],
+                stdout=subprocess.PIPE,
+                env=my_env
+            )
 
-        result = subprocess.run(
-            [
-                'restic', '-r', repo.path, 'restore', snapshot_id,
-                '--include', source_path, '--target', dest_path
-            ],
-            stdout=subprocess.PIPE,
-            env=my_env
-        )
-
-        messages.success(self.request,
-            _('{src} successfully restored to {dest}.'.format(
-                src=source_path,
-                dest=dest_path
-            )),
-        )
-        return super(RestoreView, self).form_valid(form)
+            messages.success(self.request,
+                _('{src} successfully restored to {dest}.'.format(
+                    src=source_path,
+                    dest=dest_path
+                )),
+            )
+        return redirect(self.get_success_url())
 
 
 class BackupView(LoginRequiredMixin, DetailView):

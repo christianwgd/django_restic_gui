@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'repository',
+    'django_restic_gui',
     'django_bootstrap_breadcrumbs',
     'bootstrap4',
 ]

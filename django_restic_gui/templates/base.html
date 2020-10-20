@@ -3,7 +3,6 @@
 
 {% block bootstrap4_extra_head %}
 {{ block.super }}
-
 {% endblock %}
 
 {% block bootstrap4_extra_script %}
@@ -29,7 +28,7 @@
         <div class="col-12">
             <h3 class="title">{% block title %}{% endblock %}</h3>
             <hr class="narrow" />
-            {% render_breadcrumbs %}
+            {% render_breadcrumbs "django_bootstrap_breadcrumbs/bootstrap4.html" %}
             {% bootstrap_messages %}
             {% block content %}{% endblock %}
         </div>

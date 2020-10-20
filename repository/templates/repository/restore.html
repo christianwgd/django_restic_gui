@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load i18n static bootstrap4 django_bootstrap_breadcrumbs %}
+
+{% block bootstrap4_extra_head %}
+{{ block.super }}
+{% endblock %}
+
+{% block bootstrap4_extra_script %}
+{{ block.super }}
+{% endblock %}
+
+{% block title %}{% trans 'Repositories' %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <form method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            {% buttons %}
+                <button class="btn btn-primary" name="submit" type="submit" formnovalidate>
+                    Restore
+                </button>
+                <button class="btn btn-secondary" type="submit" name="cancel" formnovalidate>
+                    Cancel
+                </button>
+            {% endbuttons %}
+        </form>
+    </div>
+</div>
+{% endblock %}

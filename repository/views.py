@@ -137,7 +137,6 @@ class RestoreView(FormView):
             stdout=subprocess.PIPE,
             env=my_env
         )
-        print(result)
 
         messages.success(self.request,
             _('{src} successfully restored to {dest}.'.format(
@@ -146,3 +145,34 @@ class RestoreView(FormView):
             )),
         )
         return super(RestoreView, self).form_valid(form)
+
+
+class BackupView(DetailView):
+    model = Repository
+
+    def get_success_url(self):
+        return self.request.session['referer']
+
+    def get(self, request, *args, **kwargs):
+        short_id = self.request.GET.get('id', None)
+        path = self.request.GET.get('path', None)
+        print(short_id, path)
+
+        # backup path
+        #restic -r ~/backup/test2 backup ~/backup-test
+        repo = self.get_object()
+        print(repo)
+        my_env = os.environ.copy()
+        my_env["RESTIC_PASSWORD"] = repo.password
+        result = subprocess.run(
+            ['restic', '-r', repo.path, 'backup', path],
+            stdout=subprocess.PIPE,
+            env=my_env
+        )
+        messages.success(self.request,
+            _('Backup of {path} successfully completed.'.format(
+                 path=path,
+            )),
+        )
+        return redirect(self.get_success_url())
+

@@ -238,7 +238,6 @@ class NewBackupView(LoginRequiredMixin, BSModalFormView):
         if not self.request.is_ajax():
             path = form.cleaned_data['path']
 
-            # restore to path
             # backup path
             repo = Repository.objects.get(pk=self.request.session['repo_id'])
             my_env = os.environ.copy()

@@ -24,8 +24,6 @@ improvements via pull requests.
   - logging
   - Add missing features from restic commands
     - Encryption of backups
-    - Creation of new restic repositories
-    - Add new backup locations
     - Remote backups
     - Compare or check backups
     - ...

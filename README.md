@@ -29,7 +29,6 @@ improvements via pull requests.
     - Remote backups
     - Compare or check backups
     - ...
-  - Login/logout in frontend
   - Tests
     
     

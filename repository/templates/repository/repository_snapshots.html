@@ -84,6 +84,8 @@ $(document).ready(function() {
                     {% endfor %}
                 </div>
             </div>
+            {% empty %}
+                <p>{% trans "Repository doesn't contain any snapshots" %}</p>
             {% endfor %}
 
         </div>

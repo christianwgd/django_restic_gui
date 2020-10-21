@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load i18n bootstrap4 %}
+
+{% block title %}{% trans 'Logged out' %}{% endblock %}
+
+{% block content %}
+<div class="col-md-4 offset-md-4">
+    <p class="text-center">
+        {% trans "You are now logged out, thanks for using this app." %}
+    </p>
+    <p class="text-center">
+        <a href="{% url 'login' %}" class="btn btn-primary" role="button">
+            <span class="far fa-sign-in"></span>
+            {% trans 'Login' %}
+        </a>
+    </p>
+
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-02-06 14:59+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: templates/accounts/logged_out.html:4
+msgid "Logged out"
+msgstr "Abgemeldet"
+
+#: templates/accounts/logged_out.html:7
+msgid "You are now logged out, thanks for using this app."
+msgstr ""
+"Sie sind jetzt abgemeldet. Vielen Dank, dass Sie diese App "
+"verwendet haben."
+
+#: templates/accounts/login.html:9
+msgid "Login"
+msgstr "Anmelden"
+
+#: templates/accounts/login.html:19
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this "
+"page. Would you like to login to a different account?"
+msgstr ""
+"Sie sind als %(username)s authentifiziert, aber nicht berechtigt, auf "
+"diese Seite zuzugreifen. Möchten Sie sich bei einem anderen Konto anmelden?"
+
+#: templates/accounts/password_change_done.html:9
+msgid "Your password was changed."
+msgstr "Ihr Passwort wurde geändert."
+
+#: templates/accounts/password_change_form.html:14
+msgid "Please correct the error below."
+msgstr "Bitte korrigieren Sie den Fehler unten."
+
+#: templates/accounts/password_change_form.html:14
+msgid "Please correct the errors below."
+msgstr "Bitte korrigieren Sie die Fehler unten."
+
+#: templates/accounts/password_change_form.html:19
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new "
+"password twice so we can verify you typed it in correctly."
+msgstr ""
+"Bitte geben Sie aus Sicherheitsgründen Ihr altes Passwort ein und dann "
+"zweimal Ihr neues Passwort, damit wir überprüfen können, ob Sie es richtig "
+"eingegeben haben."
+
+#: templates/accounts/password_change_form.html:25
+#: templates/accounts/password_change_form.html:27
+msgid "Change my password"
+msgstr "Passwort ändern"

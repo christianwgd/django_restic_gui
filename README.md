@@ -26,6 +26,7 @@ improvements via pull requests.
     - Encryption of backups
     - ...
   - Login/logout in frontend
+  - Creation of new restic repositories
   - Tests
     
     
@@ -105,4 +106,7 @@ Password (again): *********
 Superuser created successfully.
 ```
 
-Go to the web browser and visit `http://localhost:8000`
+Go to the web browser and visit `http://localhost:8000/admin` to create 
+your first restic repository. The repository must exist, since the app is 
+not able to create one at this time. See [restic docs](https://restic.readthedocs.io/en/stable/050_restore.html) 
+for details.

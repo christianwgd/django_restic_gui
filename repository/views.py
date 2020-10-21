@@ -202,11 +202,21 @@ class BackupView(LoginRequiredMixin, DetailView):
     model = Repository
 
     def get_success_url(self):
-        return self.request.session['referer']
+        rev_url = reverse('repository:browse', kwargs={'pk': self.request.session['repo_id']})
+        source_path = self.request.session['path']
+        parts = source_path.split('/')
+        url = '{url}?id={id}&path={path}'.format(
+            url=rev_url,
+            id=self.request.session['short_id'],
+            path='/'.join(parts[:-1])
+        )
+        return url
 
     def get(self, request, *args, **kwargs):
         short_id = self.request.GET.get('id', None)
         path = self.request.GET.get('path', None)
+        self.request.session['path'] = path
+        self.request.session['short_id'] = short_id
 
         # backup path
         repo = self.get_object()

@@ -4,9 +4,13 @@
 {% block bootstrap4_extra_head %}
 {{ block.super }}
 <link href="{% static 'repository/css/modal.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
 {% endblock %}
 
 {% block bootstrap4_extra_script %}
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table-locale-all.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.16.0/dist/extensions/mobile/bootstrap-table-mobile.min.js"></script>
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
 <script>
 $(document).ready(function() {
@@ -44,7 +48,8 @@ $(document).ready(function() {
 
 <div class="row">
     <div class="col-12">
-        <table id="accounts" class="table table-sm table-striped">
+        <table id="accounts" class="table table-sm table-striped" data-toggle="table"
+               data-locale="de-DE" data-mobile-responsive="true" data-min-width="1024">
             <thead>
                 <tr>
                     <th>{% trans 'Name' %}</th>

@@ -27,6 +27,7 @@ improvements via pull requests.
     - Creation of new restic repositories
     - Add new backup locations
     - Remote backups
+    - Compare or check backups
     - ...
   - Login/logout in frontend
   - Tests

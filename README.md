@@ -20,13 +20,14 @@ improvements via pull requests.
 
 ## Todo
 
-  - Error handling (runs quit optimistic by now)
+  - Error handling (runs quite optimistic by now)
   - logging
   - Add missing feature from restic commands
     - Encryption of backups
+    - Creation of new restic repositories
+    - Add new backup locations
     - ...
   - Login/logout in frontend
-  - Creation of new restic repositories
   - Tests
     
     

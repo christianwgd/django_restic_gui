@@ -1,7 +1,7 @@
 .idea/
 media/
 __pycache__/
-localsettings.py
+django_restic_gui/localsettings.py
 .vscode
 *.pyc
 log/

@@ -54,6 +54,12 @@ Install dependencies:
 $ pip install -r requirements.txt
 ```
 
+You will need to add a localsettings.py configuration file to the 
+project directory (right beneath the settings.py) to configure all 
+your local environment setings. 
+
+The deploy directory contains a template for that.
+
 ## How to run
 
 ### Default

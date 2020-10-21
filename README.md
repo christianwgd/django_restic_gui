@@ -22,7 +22,7 @@ improvements via pull requests.
 
   - Error handling (runs quite optimistic by now)
   - logging
-  - Add missing feature from restic commands
+  - Add missing features from restic commands
     - Encryption of backups
     - Creation of new restic repositories
     - Add new backup locations

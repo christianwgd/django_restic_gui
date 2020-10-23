@@ -94,7 +94,13 @@ class RepositorySnapshots(LoginRequiredMixin, DetailView):
 
 class FileBrowse(LoginRequiredMixin, DetailView):
     model = Repository
-    template_name = 'repository/file_browse.html'
+
+    def get(self, request, *args, **kwargs):
+        request.session['view'] = kwargs.get('view', 'icon')
+        return super(FileBrowse, self).get(request, *args, **kwargs)
+
+    def get_template_names(self):
+        return ['repository/file_browse_{}.html'.format(self.request.session['view'])]
 
     def get_context_data(self, **kwargs):
         short_id = self.request.GET.get('id', None)
@@ -145,6 +151,7 @@ class RestoreView(LoginRequiredMixin, BSModalFormView):
     success_url = '/'
 
     def get(self, request, *args, **kwargs):
+        request.session['view'] = kwargs.get('view', 'icon')
         request.session['repo_id'] = kwargs.get('pk', None)
         request.session['snapshot_id'] = request.GET.get('id', None)
         request.session['source_path'] = request.GET.get('path', None)
@@ -159,7 +166,13 @@ class RestoreView(LoginRequiredMixin, BSModalFormView):
         return initial
 
     def get_success_url(self):
-        rev_url = reverse('repository:browse', kwargs={'pk': self.request.session['repo_id']})
+        rev_url = reverse(
+            'repository:browse',
+            kwargs={
+                'pk': self.request.session['repo_id'],
+                'view': self.request.session['view']
+            }
+        )
         source_path = self.request.session['source_path']
         parts = source_path.split('/')
         url = '{url}?id={id}&path={path}'.format(
@@ -202,7 +215,13 @@ class BackupView(LoginRequiredMixin, DetailView):
     model = Repository
 
     def get_success_url(self):
-        rev_url = reverse('repository:browse', kwargs={'pk': self.request.session['repo_id']})
+        rev_url = reverse(
+            'repository:browse',
+            kwargs={
+                'pk': self.request.session['repo_id'],
+                'view': 'icon'
+            }
+        )
         source_path = self.request.session['path']
         parts = source_path.split('/')
         url = '{url}?id={id}&path={path}'.format(

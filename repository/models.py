@@ -32,3 +32,20 @@ class CallStack(models.Model):
     name = models.CharField(max_length=100)
     path = models.CharField(max_length=200)
 
+
+class FileType(models.Model):
+
+    def __str__(self):
+        return self.name
+
+    name = models.CharField(max_length=50)
+    svg_path = models.CharField(max_length=500)
+
+
+class FileExt(models.Model):
+
+    def __str__(self):
+        return self.name
+
+    name = models.CharField(max_length=50, unique=True)
+    type = models.ForeignKey(FileType, on_delete=models.SET_NULL, null=True, blank=True)

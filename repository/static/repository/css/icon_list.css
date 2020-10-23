@@ -1,0 +1,22 @@
+.card {
+    min-width: 120px;
+    /*max-width: 150px;*/
+    height: 135px;
+    padding-top: 1.5rem;
+    border: none;
+}
+
+.card:hover {
+    border: 1px solid #ddd;
+}
+
+.restore {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    display: none;
+}
+
+.card:hover .restore {
+    display: block;
+}

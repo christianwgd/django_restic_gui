@@ -185,21 +185,28 @@ class RestoreView(LoginRequiredMixin, BSModalFormView):
             my_env = os.environ.copy()
             my_env["RESTIC_PASSWORD"] = repo.password
 
-            result = subprocess.run(
-                [
-                    'restic', '-r', repo.path, 'restore', snapshot_id,
-                    '--include', source_path, '--target', dest_path
-                ],
-                stdout=subprocess.PIPE,
-                env=my_env
-            )
-
             if dest_path == '':
+                result = subprocess.run(
+                    [
+                        'restic', '-r', repo.path, 'restore', snapshot_id,
+                        '--include', source_path, '--target', '/'
+                    ],
+                    stdout=subprocess.PIPE,
+                    env=my_env
+                )
                 msg = _('{src} successfully restored').format(
                     src=source_path,
                     dest=dest_path
                 )
             else:
+                result = subprocess.run(
+                    [
+                        'restic', '-r', repo.path, 'restore', snapshot_id,
+                        '--include', source_path, '--target', dest_path
+                    ],
+                    stdout=subprocess.PIPE,
+                    env=my_env
+                )
                 msg = _('{src} successfully restored to {dest}').format(
                     src=source_path,
                     dest=dest_path
@@ -212,21 +219,12 @@ class BackupView(LoginRequiredMixin, DetailView):
     model = Repository
 
     def get_success_url(self):
-        rev_url = reverse(
-            'repository:browse',
+        return reverse(
+            'repository:snapshots',
             kwargs={
                 'pk': self.request.session['repo_id'],
-                'view': 'icon'
             }
         )
-        source_path = self.request.session['path']
-        parts = source_path.split('/')
-        url = '{url}?id={id}&path={path}'.format(
-            url=rev_url,
-            id=self.request.session['short_id'],
-            path='/'.join(parts[:-1])
-        )
-        return url
 
     def get(self, request, *args, **kwargs):
         short_id = self.request.GET.get('id', None)

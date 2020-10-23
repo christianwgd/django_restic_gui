@@ -15,9 +15,9 @@ from django.utils.text import slugify
 from django.views.generic import ListView, DetailView, FormView, UpdateView, CreateView
 from django.utils.translation import gettext_lazy as _
 
-from repository.callstack import push, pop, delete_to, clear, peek
+from repository.callstack import push, delete_to, clear, peek
 from repository.forms import RestoreForm, RepositoryForm, NewBackupForm
-from repository.models import Repository, CallStack
+from repository.models import Repository, CallStack, Journal
 
 
 class RepositoryList(LoginRequiredMixin, ListView):
@@ -205,6 +205,12 @@ class RestoreView(LoginRequiredMixin, BSModalFormView):
                     src=source_path,
                     dest=dest_path
                 )
+                Journal.objects.create(
+                    user=self.request.user,
+                    repo=repo,
+                    action='3',
+                    data=source_path
+                )
             else:
                 result = subprocess.run(
                     [
@@ -217,6 +223,12 @@ class RestoreView(LoginRequiredMixin, BSModalFormView):
                 msg = _('{src} successfully restored to {dest}').format(
                     src=source_path,
                     dest=dest_path
+                )
+                Journal.objects.create(
+                    user=self.request.user,
+                    repo=repo,
+                    action='3',
+                    data='{} --> {}'.format(source_path, dest_path)
                 )
             messages.success(self.request, msg)
         return redirect(self.get_success_url())
@@ -248,6 +260,12 @@ class BackupView(LoginRequiredMixin, DetailView):
             stdout=subprocess.PIPE,
             env=my_env
         )
+        Journal.objects.create(
+            user=self.request.user,
+            repo=repo,
+            action='1',
+            data=path
+        )
         messages.success(self.request,
             _('Backup of {path} successfully completed'.format(
                  path=path,
@@ -278,10 +296,21 @@ class NewBackupView(LoginRequiredMixin, BSModalFormView):
                 stdout=subprocess.PIPE,
                 env=my_env
             )
+            Journal.objects.create(
+                user=self.request.user,
+                repo=repo,
+                action='2',
+                data='{} --> {}'.format(path)
+            )
             messages.success(self.request,
                 _('Backup of {path} successfully completed'.format(
                     path=path,
                 )),
             )
         return redirect(self.get_success_url())
+
+
+class JournalView(LoginRequiredMixin, ListView):
+    model = Journal
+
 

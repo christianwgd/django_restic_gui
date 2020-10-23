@@ -13,4 +13,5 @@ urlpatterns = [
     path('restore/<int:pk>/<str:view>/', views.RestoreView.as_view(), name='restore'),
     path('backup/<int:pk>/', views.BackupView.as_view(), name='backup'),
     path('newbackup/<int:pk>/', views.NewBackupView.as_view(), name='newbackup'),
+    path('journal/', views.JournalView.as_view(), name='journal'),
 ]

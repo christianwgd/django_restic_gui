@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load i18n static bootstrap4 django_bootstrap_breadcrumbs %}
+
+{% block bootstrap4_extra_head %}
+{{ block.super }}
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
+<style>
+.tool { margin-right: 1rem; }
+</style>
+{% endblock %}
+
+{% block bootstrap4_extra_script %}
+{{ block.super }}
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table-locale-all.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.16.0/dist/extensions/mobile/bootstrap-table-mobile.min.js"></script>
+{% endblock %}
+
+{% block title %}{% trans 'Journal' %}{% endblock %}
+
+{% block breadcrumbs %}
+    {% breadcrumb "Home" "/" %}
+    {% trans 'Journal' as journal %}
+    {% breadcrumb journal 'repository:journal' %}
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="panel">
+            <table id="accounts" data-toggle="table" class="table table-sm table-striped table-bordered"
+                    data-locale="de-DE" data-mobile-responsive="true" data-min-width="768">
+                <thead>
+                    <tr>
+                        <th>{% trans 'Timestamp' %}</th>
+                        <th>{% trans 'User' %}</th>
+                        <th>{% trans 'Repository' %}</th>
+                        <th>{% trans 'Action' %}</th>
+                        <th>{% trans 'Data' %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for action in journal_list %}
+                    <tr>
+                        <td>{{ action.timestamp }}</td>
+                        <td>{{ action.user }}</td>
+                        <td>{{ action.repo }}</td>
+                        <td>{{ action.get_action_display }}</td>
+                        <td>{{ action.data }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">{% trans "The journal is empty" %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

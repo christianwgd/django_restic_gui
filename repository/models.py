@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -60,3 +61,28 @@ class FileExt(models.Model):
         FileType, on_delete=models.SET_NULL,
         null=True, blank=True, verbose_name=_('Type')
     )
+
+
+ACTION_CHOICES = (
+    ('1', _('Backup')),
+    ('2', _('Backup (new)')),
+    ('3', _('Restore')),
+    ('4', _('New Repository')),
+    ('5', _('Repository changed')),
+)
+
+
+class Journal(models.Model):
+
+    class Meta:
+        verbose_name = _('Journal')
+        ordering = ['-timestamp']
+
+    def __str__(self):
+        return '{} {}'.format(self.timestamp, self.repo)
+
+    user = models.ForeignKey(User, verbose_name=_('User'), on_delete=models.DO_NOTHING)
+    timestamp = models.DateTimeField(auto_now_add=True, verbose_name=_('Timestamp'))
+    action = models.CharField(max_length=2, choices=ACTION_CHOICES, verbose_name=_('Action'))
+    repo = models.ForeignKey(Repository, on_delete=models.DO_NOTHING, verbose_name=_('Repository'))
+    data = models.CharField(max_length=200, verbose_name=_('Data'))

@@ -194,12 +194,17 @@ class RestoreView(LoginRequiredMixin, BSModalFormView):
                 env=my_env
             )
 
-            messages.success(self.request,
-                _('{src} successfully restored to {dest}.'.format(
+            if dest_path == '':
+                msg = _('{src} successfully restored').format(
                     src=source_path,
                     dest=dest_path
-                )),
-            )
+                )
+            else:
+                msg = _('{src} successfully restored to {dest}').format(
+                    src=source_path,
+                    dest=dest_path
+                )
+            messages.success(self.request, msg)
         return redirect(self.get_success_url())
 
 
@@ -239,7 +244,7 @@ class BackupView(LoginRequiredMixin, DetailView):
             env=my_env
         )
         messages.success(self.request,
-            _('Backup of {path} successfully completed.'.format(
+            _('Backup of {path} successfully completed'.format(
                  path=path,
             )),
         )
@@ -269,7 +274,7 @@ class NewBackupView(LoginRequiredMixin, BSModalFormView):
                 env=my_env
             )
             messages.success(self.request,
-                _('Backup of {path} successfully completed.'.format(
+                _('Backup of {path} successfully completed'.format(
                     path=path,
                 )),
             )

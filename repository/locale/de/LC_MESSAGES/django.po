@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-23 13:20+0200\n"
+"POT-Creation-Date: 2020-10-23 13:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -167,10 +167,15 @@ msgstr "Repository erstellt"
 
 #: views.py:198
 #, python-brace-format
-msgid "{src} successfully restored to {dest}."
-msgstr "{src} erfolgreich wiederhergestellt in {dest}."
+msgid "{src} successfully restored"
+msgstr "{src} erfolgreich wiederhergestellt"
 
-#: views.py:242 views.py:272
+#: views.py:203
 #, python-brace-format
-msgid "Backup of {path} successfully completed."
-msgstr "Sicherung von {path} erfolgreich durchgeführt."
+msgid "{src} successfully restored to {dest}"
+msgstr "{src} erfolgreich wiederhergestellt in {dest}"
+
+#: views.py:247 views.py:277
+#, python-brace-format
+msgid "Backup of {path} successfully completed"
+msgstr "Sicherung von {path} erfolgreich durchgeführt"

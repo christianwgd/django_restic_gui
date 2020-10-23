@@ -35,17 +35,28 @@ class CallStack(models.Model):
 
 class FileType(models.Model):
 
+    class Meta:
+        verbose_name = _('File type')
+        verbose_name_plural = _('File types')
+
     def __str__(self):
         return self.name
 
-    name = models.CharField(max_length=50)
-    svg_path = models.CharField(max_length=500)
+    name = models.CharField(max_length=50, verbose_name=_('Name'))
+    svg_path = models.CharField(max_length=500, verbose_name=_('SVG Path'))
 
 
 class FileExt(models.Model):
 
+    class Meta:
+        verbose_name = _('File extension')
+        verbose_name_plural = _('File extensions')
+
     def __str__(self):
         return self.name
 
-    name = models.CharField(max_length=50, unique=True)
-    type = models.ForeignKey(FileType, on_delete=models.SET_NULL, null=True, blank=True)
+    name = models.CharField(max_length=50, unique=True, verbose_name=_('Name'))
+    type = models.ForeignKey(
+        FileType, on_delete=models.SET_NULL,
+        null=True, blank=True, verbose_name=_('Type')
+    )

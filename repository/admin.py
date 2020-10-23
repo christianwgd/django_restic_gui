@@ -27,6 +27,6 @@ class FileTypeAdmin(admin.ModelAdmin):
 class FileExtAdmin(admin.ModelAdmin):
 
     list_display = ['name', 'type']
-    search_filter = ['type']
+    list_filter = ['type']
     search_fields = ['name']
 

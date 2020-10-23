@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-21 06:49+0200\n"
+"POT-Creation-Date: 2020-10-23 13:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,20 +18,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: forms.py:7
+#: forms.py:11
+msgid "Password confirm"
+msgstr "Kennwort wiederholen"
+
+#: forms.py:29
+msgid "The two password fields didn’t match."
+msgstr ""
+
+#: forms.py:37
 msgid "Restore to path"
 msgstr "Wiederherstellen in Verzeichnis"
+
+#: forms.py:38
+msgid "Leave empty to restores to original path"
+msgstr "Leer lassen, um in den orginalen Pfad zurück zu sichern"
+
+#: forms.py:43 templates/repository/new_backup_modal.html:6
+msgid "Backup directory"
+msgstr "Verzeichnis für Sicherung"
 
 #: models.py:9
 msgid "Repository"
 msgstr ""
 
-#: models.py:10 templates/repository/repository_list.html:12
+#: models.py:10 templates/repository/repository_list.html:30
 msgid "Repositories"
 msgstr ""
 
-#: models.py:15 templates/repository/file_browse.html:50
-#: templates/repository/repository_list.html:25
+#: models.py:15 models.py:45 models.py:58
+#: templates/repository/file_browse_list.html:64
+#: templates/repository/repository_list.html:52
 msgid "Name"
 msgstr ""
 
@@ -39,57 +56,121 @@ msgstr ""
 msgid "Password"
 msgstr "Kennwort"
 
-#: models.py:19 templates/repository/file_browse.html:52
-#: templates/repository/repository_list.html:26
+#: models.py:19 templates/repository/file_browse_list.html:66
+#: templates/repository/repository_list.html:53
 msgid "Path"
 msgstr "Pfad"
 
-#: templates/repository/file_browse.html:25
-msgid "Content of Snapshot"
-msgstr "Inhalt des Snapshots"
+#: models.py:39
+msgid "File type"
+msgstr "Dateityp"
 
-#: templates/repository/file_browse.html:51
+#: models.py:40
+msgid "File types"
+msgstr "Dateitypen"
+
+#: models.py:46
+msgid "SVG Path"
+msgstr "SVG Pfad"
+
+#: models.py:52
+msgid "File extension"
+msgstr "Dateinamenerweiterung"
+
+#: models.py:53
+msgid "File extensions"
+msgstr "Dateinamenerweiterungen"
+
+#: models.py:61 templates/repository/file_browse_list.html:65
 msgid "Type"
 msgstr "Typ"
 
-#: templates/repository/file_browse.html:82
-#: templates/repository/repository_snapshots.html:69
-#: templates/repository/restore.html:12
+#: templates/repository/file_browse_icon.html:31
+#: templates/repository/file_browse_list.html:30
+msgid "Content of Snapshot"
+msgstr "Inhalt des Snapshots"
+
+#: templates/repository/file_browse_icon.html:64
+#: templates/repository/file_browse_list.html:96
+#: templates/repository/repository_snapshots.html:70
 #: templates/repository/restore_modal.html:6
 #: templates/repository/restore_modal.html:19
 msgid "Restore"
 msgstr "Wiederherstellen"
 
-#: templates/repository/repository_snapshots.html:28
-msgid "Snapshots of"
-msgstr "Snapshots von"
-
-#: templates/repository/repository_snapshots.html:57
-msgid "ID"
-msgstr ""
-
-#: templates/repository/repository_snapshots.html:58
-msgid "User"
-msgstr "Benutzer"
-
-#: templates/repository/repository_snapshots.html:59
-msgid "Host"
-msgstr ""
-
-#: templates/repository/repository_snapshots.html:75
-msgid "Backup now"
+#: templates/repository/new_backup_modal.html:19
+#, fuzzy
+#| msgid "Backup now"
+msgid "Backup"
 msgstr "Jetzt sichern"
 
+#: templates/repository/new_backup_modal.html:22
 #: templates/repository/restore_modal.html:22
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: views.py:151
+#: templates/repository/repository_form.html:14
+msgid "Change repository"
+msgstr "Repository wechseln"
+
+#: templates/repository/repository_form.html:16
+msgid "Create repository"
+msgstr "Repository erstellen"
+
+#: templates/repository/repository_list.html:63
+msgid "Snapshots"
+msgstr ""
+
+#: templates/repository/repository_list.html:69
+msgid "Add new directory to snapshots"
+msgstr "Ein Verzeichnis zum Snapshot hinzufügen"
+
+#: templates/repository/repository_list.html:75
+msgid "Update repository"
+msgstr "Repository ändern"
+
+#: templates/repository/repository_list.html:85
+msgid "There are no repositories yet"
+msgstr "Sie haben noch keine Repositories"
+
+#: templates/repository/repository_snapshots.html:29
+msgid "Snapshots of"
+msgstr "Snapshots von"
+
+#: templates/repository/repository_snapshots.html:58
+msgid "ID"
+msgstr ""
+
+#: templates/repository/repository_snapshots.html:59
+msgid "User"
+msgstr "Benutzer"
+
+#: templates/repository/repository_snapshots.html:60
+msgid "Host"
+msgstr ""
+
+#: templates/repository/repository_snapshots.html:76
+msgid "Backup now"
+msgstr "Jetzt sichern"
+
+#: templates/repository/repository_snapshots.html:88
+msgid "Repository doesn't contain any snapshots"
+msgstr "Das Repository enthält noch keine Snapshots"
+
+#: views.py:34
+msgid "Repository changed."
+msgstr "Repository geändert"
+
+#: views.py:43
+msgid "Repository created"
+msgstr "Repository erstellt"
+
+#: views.py:198
 #, python-brace-format
 msgid "{src} successfully restored to {dest}."
 msgstr "{src} erfolgreich wiederhergestellt in {dest}."
 
-#: views.py:179
+#: views.py:242 views.py:272
 #, python-brace-format
 msgid "Backup of {path} successfully completed."
 msgstr "Sicherung von {path} erfolgreich durchgeführt."

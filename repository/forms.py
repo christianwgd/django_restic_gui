@@ -33,7 +33,10 @@ class RepositoryForm(forms.ModelForm):
 
 
 class RestoreForm(BSModalForm):
-    path = forms.CharField(label=_('Restore to path'))
+    path = forms.CharField(
+        label=_('Restore to path'), required=False,
+        help_text=_('Leave empty to restores to original path')
+    )
 
 
 class NewBackupForm(BSModalForm):

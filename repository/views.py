@@ -157,14 +157,6 @@ class RestoreView(LoginRequiredMixin, BSModalFormView):
         request.session['source_path'] = request.GET.get('path', None)
         return super(RestoreView, self).get(request, *args, **kwargs)
 
-    def get_initial(self):
-        initial = super().get_initial()
-        source_path = self.request.session['source_path']
-        if os.path.isfile(source_path):
-            source_path = os.path.dirname(source_path)
-        initial['path'] = source_path
-        return initial
-
     def get_success_url(self):
         rev_url = reverse(
             'repository:browse',

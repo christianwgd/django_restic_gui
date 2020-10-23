@@ -16,7 +16,7 @@
 <script>
 $(document).ready(function() {
     $(".restore").each(function() {
-        var url = $(this).data('url')+"?id="+$(this).data('id')+"&path="+$(this).data('path');
+        var url = $(this).data('url')+"?id="+$(this).data('id')+"&path="+$(this).data('path')+"&return=snapshots";
         $(this).modalForm({
             formURL: url,
             modalID: "#restoreModal"

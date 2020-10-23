@@ -155,24 +155,31 @@ class RestoreView(LoginRequiredMixin, BSModalFormView):
         request.session['repo_id'] = kwargs.get('pk', None)
         request.session['snapshot_id'] = request.GET.get('id', None)
         request.session['source_path'] = request.GET.get('path', None)
+        request.session['return'] = request.GET.get('return', None)
         return super(RestoreView, self).get(request, *args, **kwargs)
 
     def get_success_url(self):
-        rev_url = reverse(
-            'repository:browse',
-            kwargs={
-                'pk': self.request.session['repo_id'],
-                'view': self.request.session['view']
-            }
-        )
-        source_path = self.request.session['source_path']
-        parts = source_path.split('/')
-        url = '{url}?id={id}&path={path}'.format(
-            url=rev_url,
-            id=self.request.session['snapshot_id'],
-            path='/'.join(parts[:-1])
-        )
-        return url
+        if self.request.session['return']:
+            return reverse(
+                'repository:snapshots',
+                kwargs={'pk': self.request.session['repo_id']}
+            )
+        else:
+            rev_url = reverse(
+                'repository:browse',
+                kwargs={
+                    'pk': self.request.session['repo_id'],
+                    'view': self.request.session['view']
+                }
+            )
+            source_path = self.request.session['source_path']
+            parts = source_path.split('/')
+            url = '{url}?id={id}&path={path}'.format(
+                url=rev_url,
+                id=self.request.session['snapshot_id'],
+                path='/'.join(parts[:-1])
+            )
+            return url
 
     def form_valid(self, form):
         if not self.request.is_ajax():

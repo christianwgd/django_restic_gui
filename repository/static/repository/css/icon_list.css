@@ -7,7 +7,8 @@
 }
 
 .card:hover {
-    border: 1px solid #ddd;
+    border: 1px solid #cccccc;
+    background-color: #eeeeee;
 }
 
 .restore {
@@ -15,6 +16,12 @@
     top: 5px;
     left: 5px;
     display: none;
+    background-color: white;
+    border-radius: 50%;
+    padding: 2px;
+    height: 2em;
+    width: 2em;
+    border: 1px solid #cccccc;
 }
 
 .card:hover .restore {

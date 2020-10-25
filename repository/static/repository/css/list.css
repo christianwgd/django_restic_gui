@@ -1,0 +1,8 @@
+.action {
+    cursor: pointer;
+    color: gray;
+}
+
+.action:hover {
+    color: black;
+}

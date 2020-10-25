@@ -65,7 +65,7 @@ class FileExt(models.Model):
 
 ACTION_CHOICES = (
     ('1', _('Backup')),
-    ('2', _('Backup (new)')),
+    ('2', _('Download')),
     ('3', _('Restore')),
     ('4', _('New Repository')),
     ('5', _('Repository changed')),

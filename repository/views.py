@@ -1,5 +1,6 @@
 import json
 import os
+import shutil
 import subprocess
 from types import SimpleNamespace
 
@@ -9,10 +10,11 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import FileResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.text import slugify
-from django.views.generic import ListView, DetailView, FormView, UpdateView, CreateView
+from django.views.generic import ListView, DetailView, UpdateView, CreateView
 from django.utils.translation import gettext_lazy as _
 
 from repository.callstack import push, delete_to, clear, peek
@@ -299,7 +301,7 @@ class NewBackupView(LoginRequiredMixin, BSModalFormView):
             Journal.objects.create(
                 user=self.request.user,
                 repo=repo,
-                action='2',
+                action='1',
                 data='{} --> {}'.format(path)
             )
             messages.success(self.request,
@@ -313,4 +315,88 @@ class NewBackupView(LoginRequiredMixin, BSModalFormView):
 class JournalView(LoginRequiredMixin, ListView):
     model = Journal
 
+
+class Download(DetailView):
+    model = Repository
+
+    def get_success_url(self):
+        if self.request.session['return']:
+            return reverse(
+                'repository:snapshots',
+                kwargs={'pk': self.request.session['repo_id']}
+            )
+        else:
+            rev_url = reverse(
+                'repository:browse',
+                kwargs={
+                    'pk': self.request.session['repo_id'],
+                    'view': self.request.session['view']
+                }
+            )
+            source_path = self.request.session['source_path']
+            parts = source_path.split('/')
+            url = '{url}?id={id}&path={path}'.format(
+                url=rev_url,
+                id=self.request.session['snapshot_id'],
+                path='/'.join(parts[:-1])
+            )
+            return url
+
+    def get(self, request, *args, **kwargs):
+        request.session['view'] = kwargs.get('view', 'icon')
+        repo_id = kwargs.get('pk', None)
+        snapshot_id = request.GET.get('id', None)
+        path = request.GET.get('path', None)
+        repo = Repository.objects.get(pk=repo_id)
+
+        temp_path = getattr(settings, "TEMP_PATH", None)
+        if temp_path is None:
+            messages.error(
+                self.request,
+                _('You need to set the download path in localsetting.py to enable downloads')
+            )
+            return redirect(self.get_success_url())
+        download_path = os.path.join(temp_path, slugify(repo.name))
+
+        # restore to temp path
+        my_env = os.environ.copy()
+        my_env["RESTIC_PASSWORD"] = repo.password
+
+        result = subprocess.run(
+            [
+                'restic', '-r', repo.path, 'restore', snapshot_id,
+                '--include', path, '--target', download_path
+            ],
+            stdout=subprocess.PIPE,
+            env=my_env
+        )
+        Journal.objects.create(
+            user=self.request.user,
+            repo=repo,
+            action='2',
+            data='{}'.format(path)
+        )
+
+        zip_filename = '{}_{}'.format(
+            slugify(repo.name),
+            os.path.basename(os.path.normpath(path))
+        )
+        zip_fullpath = os.path.join(temp_path, zip_filename)
+        zip_dir = os.path.dirname((os.path.join(download_path, path[1:])))
+        shutil.make_archive(
+            zip_fullpath,
+            'zip',
+            zip_dir
+        )
+
+        zip_name = zip_filename + '.zip'
+        zip_fullpath = os.path.join(temp_path, zip_name)
+
+        zip_file = open(zip_fullpath, 'rb')
+        resp = FileResponse(zip_file, content_type="application/force-download")
+        resp['Content-Disposition'] = 'attachment; filename=%s' % zip_name
+
+        os.remove(zip_fullpath)
+        shutil.rmtree(download_path)
+        return resp
 

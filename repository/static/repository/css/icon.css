@@ -11,10 +11,9 @@
     background-color: #eeeeee;
 }
 
-.restore {
+.action {
     position: absolute;
-    top: 5px;
-    left: 5px;
+    bottom: 5px;
     display: none;
     background-color: white;
     border-radius: 50%;
@@ -24,6 +23,24 @@
     border: 1px solid #cccccc;
 }
 
-.card:hover .restore {
+.restore {
+    left: 5px;
+}
+
+.download {
+    right: 5px;
+}
+
+.restore, .download {
+    cursor: pointer;
+    color: gray;
+}
+
+.restore:hover, .download:hover {
+    color: black;
+}
+
+.card:hover .restore,
+.card:hover .download {
     display: block;
 }

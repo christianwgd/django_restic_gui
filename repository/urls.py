@@ -11,6 +11,7 @@ urlpatterns = [
     path('snapshots/<int:pk>/', views.RepositorySnapshots.as_view(), name='snapshots'),
     path('browse/<int:pk>/<str:view>/', views.FileBrowse.as_view(), name='browse'),
     path('restore/<int:pk>/<str:view>/', views.RestoreView.as_view(), name='restore'),
+    path('download/<int:pk>/<str:view>/', views.Download.as_view(), name='download'),
     path('backup/<int:pk>/', views.BackupView.as_view(), name='backup'),
     path('newbackup/<int:pk>/', views.NewBackupView.as_view(), name='newbackup'),
     path('journal/', views.JournalView.as_view(), name='journal'),

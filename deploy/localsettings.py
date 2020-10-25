@@ -32,3 +32,5 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # backup path, should end with a slash
 LOCAL_BACKUP_PATH = '/path/to/your/backups/'
+# temporary path for downloads
+TEMP_PATH = '/path/to/temp/dir/'

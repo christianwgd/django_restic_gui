@@ -243,7 +243,7 @@ class BackupView(LoginRequiredMixin, DetailView):
         return reverse(
             'repository:snapshots',
             kwargs={
-                'pk': self.request.session['repo_id'],
+                'pk': self.get_object().id,
             }
         )
 

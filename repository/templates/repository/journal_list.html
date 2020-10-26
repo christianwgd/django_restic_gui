@@ -3,6 +3,7 @@
 
 {% block bootstrap4_extra_head %}
 {{ block.super }}
+<link rel="stylesheet" href="{% static 'repository/css/journal.css' %}">
 <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
 <style>
 .tool { margin-right: 1rem; }
@@ -29,7 +30,7 @@
 <div class="row">
     <div class="col-12">
         <div class="panel">
-            <table id="accounts" data-toggle="table" class="table table-sm table-striped table-bordered"
+            <table id="journal" data-toggle="table" class="table table-sm table-striped"
                     data-locale="de-DE" data-mobile-responsive="true" data-min-width="768">
                 <thead>
                     <tr>

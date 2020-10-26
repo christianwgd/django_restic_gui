@@ -1,0 +1,9 @@
+#id_content {
+    margin-top: 20px;
+}
+
+.alert {
+    position: absolute;
+    top: -10px;
+    right: 15px;
+}

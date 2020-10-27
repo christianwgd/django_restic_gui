@@ -14,7 +14,7 @@ class RepositoryForm(forms.ModelForm):
 
     class Meta:
         model = Repository
-        fields = ['name', 'password', 'password2']
+        fields = ['name', 'sudo',  'password', 'password2']
         widgets = {
             'password': forms.PasswordInput,
         }

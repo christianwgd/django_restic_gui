@@ -1,0 +1,4 @@
+# put this file to /etc/sudoers.d if you need
+# to use restic with sudo
+Defaults env_keep += "RESTIC_PASSWORD"
+<userid> ALL = (ALL) NOPASSWD: /usr/local/bin/restic

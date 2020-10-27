@@ -22,6 +22,16 @@ from repository.forms import RestoreForm, RepositoryForm, NewBackupForm
 from repository.models import Repository, CallStack, Journal
 
 
+def restic_command(repo, command):
+    my_env = os.environ.copy()
+    my_env["RESTIC_PASSWORD"] = repo.password
+
+    if repo.sudo:
+        command.insert(0, 'sudo')
+
+    return subprocess.run(command, stdout=subprocess.PIPE, env=my_env)
+
+
 class RepositoryList(LoginRequiredMixin, ListView):
     model = Repository
 
@@ -55,12 +65,13 @@ class RepositoryCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
         my_env = os.environ.copy()
         my_env["RESTIC_PASSWORD"] = form.cleaned_data['password']
+        sudo = 'sudo' in form.cleaned_data
 
-        result = subprocess.run(
-            ['restic', 'init', '-r', path],
-            stdout=subprocess.PIPE,
-            env=my_env
-        )
+        command = ['restic', 'init', '-r', path]
+        if sudo:
+            command.insert(0, 'sudo')
+
+        result = subprocess.run(command, stdout=subprocess.PIPE, env=my_env)
 
         form.instance.path = path
         return super(RepositoryCreate, self).form_valid(form)
@@ -76,14 +87,8 @@ class RepositorySnapshots(LoginRequiredMixin, DetailView):
         ctx = super(RepositorySnapshots, self).get_context_data(**kwargs)
         repo = self.get_object()
 
-        my_env = os.environ.copy()
-        my_env["RESTIC_PASSWORD"] = repo.password
-
-        result = subprocess.run(
-            ['restic', '-r', repo.path, 'snapshots', '--json'],
-            stdout=subprocess.PIPE,
-            env=my_env
-        )
+        command = ['restic', '-r', repo.path, 'snapshots', '--json']
+        result = restic_command(repo, command)
         snapshots = json.loads(result.stdout, object_hook=lambda d: SimpleNamespace(**d))
         if snapshots is not None:
             for snap in snapshots:
@@ -110,14 +115,9 @@ class FileBrowse(LoginRequiredMixin, DetailView):
 
         ctx = super(FileBrowse, self).get_context_data(**kwargs)
         repo = self.get_object()
-        my_env = os.environ.copy()
-        my_env["RESTIC_PASSWORD"] = repo.password
 
-        result = subprocess.run(
-            ['restic', '-r', repo.path, 'ls', short_id, path, '--json'],
-            stdout=subprocess.PIPE,
-            env=my_env
-        )
+        command = ['sudo', 'restic', '-r', repo.path, 'ls', short_id, path, '--json']
+        result = restic_command(repo, command)
 
         results = result.stdout.decode(encoding='UTF-8').split('\n')
         pathlist = []
@@ -191,18 +191,12 @@ class RestoreView(LoginRequiredMixin, BSModalFormView):
 
             # restore to path
             repo = Repository.objects.get(pk=self.request.session['repo_id'])
-            my_env = os.environ.copy()
-            my_env["RESTIC_PASSWORD"] = repo.password
 
             if dest_path == '':
-                result = subprocess.run(
-                    [
-                        'restic', '-r', repo.path, 'restore', snapshot_id,
-                        '--include', source_path, '--target', '/'
-                    ],
-                    stdout=subprocess.PIPE,
-                    env=my_env
-                )
+                command = [
+                    'restic', '-r', repo.path, 'restore', snapshot_id,
+                    '--include', source_path, '--target', '/'
+                ]
                 msg = _('{src} successfully restored').format(
                     src=source_path,
                     dest=dest_path
@@ -214,14 +208,10 @@ class RestoreView(LoginRequiredMixin, BSModalFormView):
                     data=source_path
                 )
             else:
-                result = subprocess.run(
-                    [
-                        'restic', '-r', repo.path, 'restore', snapshot_id,
-                        '--include', source_path, '--target', dest_path
-                    ],
-                    stdout=subprocess.PIPE,
-                    env=my_env
-                )
+                command = [
+                    'restic', '-r', repo.path, 'restore', snapshot_id,
+                    '--include', source_path, '--target', dest_path
+                ]
                 msg = _('{src} successfully restored to {dest}').format(
                     src=source_path,
                     dest=dest_path
@@ -232,6 +222,7 @@ class RestoreView(LoginRequiredMixin, BSModalFormView):
                     action='3',
                     data='{} --> {}'.format(source_path, dest_path)
                 )
+            result = restic_command(repo, command)
             messages.success(self.request, msg)
         return redirect(self.get_success_url())
 
@@ -255,13 +246,8 @@ class BackupView(LoginRequiredMixin, DetailView):
 
         # backup path
         repo = self.get_object()
-        my_env = os.environ.copy()
-        my_env["RESTIC_PASSWORD"] = repo.password
-        result = subprocess.run(
-            ['restic', '-r', repo.path, 'backup', path],
-            stdout=subprocess.PIPE,
-            env=my_env
-        )
+        command = ['restic', '-r', repo.path, 'backup', path]
+        result = restic_command(repo, command)
         Journal.objects.create(
             user=self.request.user,
             repo=repo,
@@ -291,13 +277,8 @@ class NewBackupView(LoginRequiredMixin, BSModalFormView):
 
             # backup path
             repo = Repository.objects.get(pk=self.request.session['repo_id'])
-            my_env = os.environ.copy()
-            my_env["RESTIC_PASSWORD"] = repo.password
-            result = subprocess.run(
-                ['restic', '-r', repo.path, 'backup', path],
-                stdout=subprocess.PIPE,
-                env=my_env
-            )
+            command = ['restic', '-r', repo.path, 'backup', path]
+            result = restic_command(repo, command)
             Journal.objects.create(
                 user=self.request.user,
                 repo=repo,
@@ -359,17 +340,11 @@ class Download(DetailView):
         download_path = os.path.join(temp_path, slugify(repo.name))
 
         # restore to temp path
-        my_env = os.environ.copy()
-        my_env["RESTIC_PASSWORD"] = repo.password
-
-        result = subprocess.run(
-            [
-                'restic', '-r', repo.path, 'restore', snapshot_id,
-                '--include', path, '--target', download_path
-            ],
-            stdout=subprocess.PIPE,
-            env=my_env
-        )
+        command = [
+            'restic', '-r', repo.path, 'restore', snapshot_id,
+            '--include', path, '--target', download_path
+        ]
+        result = restic_command(repo, command)
         Journal.objects.create(
             user=self.request.user,
             repo=repo,

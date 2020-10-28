@@ -1,4 +1,7 @@
 # put this file to /etc/sudoers.d if you need
 # to use restic with sudo
+# WARNING WARNING WARNING WARNING WARNING WARNING!!!
+Only edit sudoers files with "sudo visudo -f /etc/sudoers.d/restic"
+# This will check on syntax errors, which can make sudo unusable!
 Defaults env_keep += "RESTIC_PASSWORD"
 <userid> ALL = (ALL) NOPASSWD: /usr/local/bin/restic

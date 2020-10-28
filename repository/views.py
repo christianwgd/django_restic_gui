@@ -116,7 +116,7 @@ class FileBrowse(LoginRequiredMixin, DetailView):
         ctx = super(FileBrowse, self).get_context_data(**kwargs)
         repo = self.get_object()
 
-        command = ['sudo', 'restic', '-r', repo.path, 'ls', short_id, path, '--json']
+        command = ['restic', '-r', repo.path, 'ls', short_id, path, '--json']
         result = restic_command(repo, command)
 
         results = result.stdout.decode(encoding='UTF-8').split('\n')

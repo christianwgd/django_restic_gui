@@ -1,0 +1,17 @@
+.tool { margin-right: 1rem; }
+
+.diskusage {
+    margin-bottom: 1rem;
+    border: 1px solid #dddddd;
+    padding: 5px;
+    margin: 5px 0px 2rem 0px;
+}
+
+.progress {
+    height: 2rem;
+}
+
+.free {
+    color:#666666;
+    background-color: #eeeeee;
+}

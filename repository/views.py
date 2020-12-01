@@ -4,6 +4,7 @@ import shutil
 import subprocess
 from types import SimpleNamespace
 
+import humanize
 from bootstrap_modal_forms.generic import BSModalFormView
 from dateutil.parser import parse
 from django.conf import settings
@@ -38,6 +39,23 @@ class RepositoryList(LoginRequiredMixin, ListView):
     def get(self, request, *args, **kwargs):
         clear()
         return super(RepositoryList, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        ctx = super(RepositoryList, self).get_context_data(**kwargs)
+        total, used, free = shutil.disk_usage(settings.LOCAL_BACKUP_PATH)
+        ctx['total'] = humanize.naturalsize(total, binary=True)
+        ctx['used'] = humanize.naturalsize(used, binary=True)
+        ctx['free'] = humanize.naturalsize(free, binary=True)
+        ctx['ratio'] = ratio = int(used / total * 100)
+        ctx['freeratio'] = 100 - ratio
+        if ratio < 50:
+            ctx['bar_class'] = 'bg-success'
+        elif ratio < 80:
+            ctx['bar_class'] = 'bg-warning'
+        else:
+            ctx['bar_class'] = 'bg-danger'
+        return ctx
+
 
 
 class RepositoryUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):

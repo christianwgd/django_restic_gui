@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-23 15:10+0200\n"
+"POT-Creation-Date: 2020-12-01 16:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,17 +38,17 @@ msgstr "Leer lassen, um in den orginalen Pfad zurück zu sichern"
 msgid "Backup directory"
 msgstr "Verzeichnis für Sicherung"
 
-#: models.py:10 models.py:87 templates/repository/journal_list.html:38
+#: models.py:10 models.py:88 templates/repository/journal_list.html:39
 msgid "Repository"
 msgstr ""
 
-#: models.py:11 templates/repository/repository_list.html:30
+#: models.py:11 templates/repository/repository_list.html:28
 msgid "Repositories"
 msgstr ""
 
-#: models.py:16 models.py:46 models.py:59
-#: templates/repository/file_browse_list.html:64
-#: templates/repository/repository_list.html:52
+#: models.py:16 models.py:47 models.py:60
+#: templates/repository/file_browse_list.html:65
+#: templates/repository/repository_list.html:68
 msgid "Name"
 msgstr ""
 
@@ -56,92 +56,94 @@ msgstr ""
 msgid "Password"
 msgstr "Kennwort"
 
-#: models.py:20 templates/repository/file_browse_list.html:66
-#: templates/repository/journal_list.html:40
-#: templates/repository/repository_list.html:53
+#: models.py:20 templates/repository/file_browse_list.html:67
+#: templates/repository/repository_list.html:69
 msgid "Path"
 msgstr "Pfad"
 
-#: models.py:40
+#: models.py:22
+msgid "Repository needs admin privileges"
+msgstr ""
+
+#: models.py:41
 msgid "File type"
 msgstr "Dateityp"
 
-#: models.py:41
+#: models.py:42
 msgid "File types"
 msgstr "Dateitypen"
 
-#: models.py:47
+#: models.py:48
 msgid "SVG Path"
 msgstr "SVG Pfad"
 
-#: models.py:53
+#: models.py:54
 msgid "File extension"
 msgstr "Dateinamenerweiterung"
 
-#: models.py:54
+#: models.py:55
 msgid "File extensions"
 msgstr "Dateinamenerweiterungen"
 
-#: models.py:62 templates/repository/file_browse_list.html:65
+#: models.py:63 templates/repository/file_browse_list.html:66
 msgid "Type"
 msgstr "Typ"
 
-#: models.py:67 templates/repository/new_backup_modal.html:19
-#, fuzzy
-#| msgid "Backup now"
+#: models.py:68 templates/repository/new_backup_modal.html:19
 msgid "Backup"
-msgstr "Jetzt sichern"
+msgstr "Sichern"
 
-#: models.py:68
-#, fuzzy
-#| msgid "Backup now"
-msgid "Backup (new)"
-msgstr "Jetzt sichern"
+#: models.py:69 templates/repository/file_browse_icon.html:70
+#: templates/repository/file_browse_list.html:107
+#: templates/repository/file_browse_list.html:112
+msgid "Download"
+msgstr ""
 
-#: models.py:69 templates/repository/file_browse_icon.html:64
-#: templates/repository/file_browse_list.html:96
+#: models.py:70 templates/repository/file_browse_icon.html:64
+#: templates/repository/file_browse_list.html:98
+#: templates/repository/file_browse_list.html:103
 #: templates/repository/repository_snapshots.html:70
 #: templates/repository/restore_modal.html:6
 #: templates/repository/restore_modal.html:19
 msgid "Restore"
 msgstr "Wiederherstellen"
 
-#: models.py:70
+#: models.py:71
 msgid "New Repository"
 msgstr "Repository erstellt"
 
-#: models.py:71
+#: models.py:72
 msgid "Repository changed"
 msgstr "Repository geändert"
 
-#: models.py:78 templates/repository/journal_list.html:19
-#: templates/repository/journal_list.html:23
+#: models.py:79 templates/repository/journal_list.html:20
+#: templates/repository/journal_list.html:24
 msgid "Journal"
 msgstr ""
 
-#: models.py:84 templates/repository/journal_list.html:37
+#: models.py:85 templates/repository/journal_list.html:38
 #: templates/repository/repository_snapshots.html:59
 msgid "User"
 msgstr "Benutzer"
 
-#: models.py:85 templates/repository/journal_list.html:36
+#: models.py:86 templates/repository/journal_list.html:37
 msgid "Timestamp"
 msgstr "Datum/Zeit"
 
-#: models.py:86 templates/repository/journal_list.html:39
+#: models.py:87 templates/repository/journal_list.html:40
 msgid "Action"
 msgstr "Aktion"
 
-#: models.py:88
+#: models.py:89 templates/repository/journal_list.html:41
 msgid "Data"
 msgstr "Daten"
 
 #: templates/repository/file_browse_icon.html:31
-#: templates/repository/file_browse_list.html:30
+#: templates/repository/file_browse_list.html:31
 msgid "Content of Snapshot"
 msgstr "Inhalt des Snapshots"
 
-#: templates/repository/journal_list.html:54
+#: templates/repository/journal_list.html:55
 msgid "The journal is empty"
 msgstr "Das Journal ist leer"
 
@@ -158,19 +160,35 @@ msgstr "Repository wechseln"
 msgid "Create repository"
 msgstr "Repository erstellen"
 
-#: templates/repository/repository_list.html:63
+#: templates/repository/repository_list.html:45
+msgid "Disk usage"
+msgstr "Plattennutzung"
+
+#: templates/repository/repository_list.html:46
+msgid "Total"
+msgstr "Kapazität"
+
+#: templates/repository/repository_list.html:51
+msgid "Used: "
+msgstr "Verwendet "
+
+#: templates/repository/repository_list.html:55
+msgid "Free: "
+msgstr "Verfügbar "
+
+#: templates/repository/repository_list.html:79
 msgid "Snapshots"
 msgstr ""
 
-#: templates/repository/repository_list.html:69
+#: templates/repository/repository_list.html:85
 msgid "Add new directory to snapshots"
 msgstr "Ein Verzeichnis zum Snapshot hinzufügen"
 
-#: templates/repository/repository_list.html:75
+#: templates/repository/repository_list.html:91
 msgid "Update repository"
 msgstr "Repository ändern"
 
-#: templates/repository/repository_list.html:85
+#: templates/repository/repository_list.html:101
 msgid "There are no repositories yet"
 msgstr "Sie haben noch keine Repositories"
 
@@ -194,25 +212,35 @@ msgstr "Jetzt sichern"
 msgid "Repository doesn't contain any snapshots"
 msgstr "Das Repository enthält noch keine Snapshots"
 
-#: views.py:34
+#: views.py:64
 msgid "Repository changed."
 msgstr "Repository geändert"
 
-#: views.py:43
+#: views.py:73
 msgid "Repository created"
 msgstr "Repository erstellt"
 
-#: views.py:204
+#: views.py:218
 #, python-brace-format
 msgid "{src} successfully restored"
 msgstr "{src} erfolgreich wiederhergestellt"
 
-#: views.py:223
+#: views.py:233
 #, python-brace-format
 msgid "{src} successfully restored to {dest}"
 msgstr "{src} erfolgreich wiederhergestellt in {dest}"
 
-#: views.py:270 views.py:306
+#: views.py:276 views.py:307
 #, python-brace-format
 msgid "Backup of {path} successfully completed"
 msgstr "Sicherung von {path} erfolgreich durchgeführt"
+
+#: views.py:355
+msgid ""
+"You need to set the download path in localsetting.py to enable downloads"
+msgstr ""
+
+#, fuzzy
+#~| msgid "Backup now"
+#~ msgid "Backup (new)"
+#~ msgstr "Jetzt sichern"

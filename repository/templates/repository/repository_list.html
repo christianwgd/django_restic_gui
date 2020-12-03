@@ -72,6 +72,7 @@ $(document).ready(function() {
                     <tr>
                         <th>{% trans 'Name' %}</th>
                         <th>{% trans 'Path' %}</th>
+                        <th>{% trans 'Size' %}</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -80,6 +81,7 @@ $(document).ready(function() {
                     <tr>
                         <td>{{ repo.name }}</td>
                         <td>{{ repo.path }}</td>
+                        <td>{{ repo.size }}</td>
                         <td>
                             <a class="tool" href="{% url 'repository:snapshots' repo.id %}" title="{% trans 'Snapshots' %}">
                                 <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" class="bi bi-folder-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

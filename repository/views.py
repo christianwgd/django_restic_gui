@@ -26,10 +26,6 @@ from repository.models import Repository, CallStack, Journal
 def restic_command(repo, command):
     my_env = os.environ.copy()
     my_env["RESTIC_PASSWORD"] = repo.password
-
-    # if repo.sudo:
-    #     command.insert(0, 'sudo')
-
     return subprocess.run(command, stdout=subprocess.PIPE, env=my_env)
 
 

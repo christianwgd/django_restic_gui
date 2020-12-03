@@ -19,7 +19,6 @@ class Repository(models.Model):
         allow_files=False, allow_folders=True,
         verbose_name=_('Path'), path=settings.LOCAL_BACKUP_PATH
     )
-    sudo = models.BooleanField(default=False, help_text=_('Repository needs admin privileges'))
 
 
 class CallStack(models.Model):

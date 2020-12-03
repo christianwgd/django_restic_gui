@@ -27,8 +27,8 @@ def restic_command(repo, command):
     my_env = os.environ.copy()
     my_env["RESTIC_PASSWORD"] = repo.password
 
-    if repo.sudo:
-        command.insert(0, 'sudo')
+    # if repo.sudo:
+    #     command.insert(0, 'sudo')
 
     return subprocess.run(command, stdout=subprocess.PIPE, env=my_env)
 
@@ -37,7 +37,6 @@ def get_directory_size(directory):
     """Returns the `directory` size in bytes."""
     total = 0
     try:
-        print("[+] Getting the size of", directory)
         for entry in os.scandir(directory):
             if entry.is_file():
                 # if it's a file, use stat() function
@@ -50,7 +49,6 @@ def get_directory_size(directory):
         return os.path.getsize(directory)
     except PermissionError:
         # if for whatever reason we can't open the folder, return 0
-        print('Permission Error')
         return 0
     return total
 

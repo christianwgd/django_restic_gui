@@ -50,6 +50,7 @@ def get_directory_size(directory):
         return os.path.getsize(directory)
     except PermissionError:
         # if for whatever reason we can't open the folder, return 0
+        print('Permission Error')
         return 0
     return total
 

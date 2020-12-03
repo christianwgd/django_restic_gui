@@ -37,7 +37,7 @@ def get_directory_size(directory):
     """Returns the `directory` size in bytes."""
     total = 0
     try:
-        # print("[+] Getting the size of", directory)
+        print("[+] Getting the size of", directory)
         for entry in os.scandir(directory):
             if entry.is_file():
                 # if it's a file, use stat() function

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-03 19:37+0100\n"
+"POT-Creation-Date: 2020-12-15 19:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,7 +38,32 @@ msgstr "Leer lassen, um in den orginalen Pfad zurück zu sichern"
 msgid "Backup directory"
 msgstr "Verzeichnis für Sicherung"
 
-#: models.py:10 models.py:87 templates/repository/journal_list.html:39
+#: management/commands/log_size.py:9
+msgid "Log size of repositories"
+msgstr "Größe der Repositories schreiben"
+
+#: management/commands/log_size.py:15
+msgid ""
+"Repository, to log the size for, if not provided the size of all "
+"repositories is logged."
+msgstr ""
+"Repository, für das die Größe geschrieben ist. Falls nicht angegeben, wird "
+"die Größe für alle Repositories geschrieben."
+
+#: management/commands/log_size.py:23
+msgid "Repository does not exist: {}"
+msgstr "Das Repository existiert nicht: {}"
+
+#: management/commands/log_size.py:27
+msgid "Successfully logged size for {}"
+msgstr "Größe geschrieben für {}"
+
+#: management/commands/log_size.py:36
+msgid "Successfully logged size for all repositories"
+msgstr "Größe geschrieben für alle Repositories"
+
+#: models.py:10 models.py:87 models.py:103
+#: templates/repository/journal_list.html:39
 msgid "Repository"
 msgstr ""
 
@@ -122,7 +147,7 @@ msgstr ""
 msgid "User"
 msgstr "Benutzer"
 
-#: models.py:85 templates/repository/journal_list.html:37
+#: models.py:85 models.py:101 templates/repository/journal_list.html:37
 msgid "Timestamp"
 msgstr "Datum/Zeit"
 
@@ -133,6 +158,18 @@ msgstr "Aktion"
 #: models.py:88 templates/repository/journal_list.html:41
 msgid "Data"
 msgstr "Daten"
+
+#: models.py:94
+msgid "Repository Size"
+msgstr "Repository Größe"
+
+#: models.py:95
+msgid "Repository Sizes"
+msgstr "Repository Größen"
+
+#: models.py:102 templates/repository/repository_list.html:75
+msgid "Size"
+msgstr "Größe"
 
 #: templates/repository/file_browse_icon.html:31
 #: templates/repository/file_browse_list.html:31
@@ -147,6 +184,15 @@ msgstr "Das Journal ist leer"
 #: templates/repository/restore_modal.html:22
 msgid "Cancel"
 msgstr "Abbrechen"
+
+#: templates/repository/repository_chart.html:29
+msgid "Repository size"
+msgstr "Repository Größe"
+
+#: templates/repository/repository_chart.html:52
+#: templates/repository/repository_chart.html:65
+msgid "Repository size development"
+msgstr "Repository Größenentwicklung"
 
 #: templates/repository/repository_form.html:14
 msgid "Change repository"
@@ -164,23 +210,19 @@ msgstr "Verwendet "
 msgid "Free: "
 msgstr "Verfügbar "
 
-#: templates/repository/repository_list.html:75
-msgid "Size"
-msgstr "Größe"
-
-#: templates/repository/repository_list.html:86
+#: templates/repository/repository_list.html:83
 msgid "Snapshots"
 msgstr ""
 
-#: templates/repository/repository_list.html:92
+#: templates/repository/repository_list.html:90
 msgid "Add new directory to snapshots"
 msgstr "Ein Verzeichnis zum Snapshot hinzufügen"
 
-#: templates/repository/repository_list.html:98
+#: templates/repository/repository_list.html:96
 msgid "Update repository"
 msgstr "Repository ändern"
 
-#: templates/repository/repository_list.html:108
+#: templates/repository/repository_list.html:106
 msgid "There are no repositories yet"
 msgstr "Sie haben noch keine Repositories"
 
@@ -204,30 +246,30 @@ msgstr "Jetzt sichern"
 msgid "Repository doesn't contain any snapshots"
 msgstr "Das Repository enthält noch keine Snapshots"
 
-#: views.py:89
+#: views.py:107
 msgid "Repository changed."
 msgstr "Repository geändert"
 
-#: views.py:98
+#: views.py:116
 msgid "Repository created"
 msgstr "Repository erstellt"
 
-#: views.py:243
+#: views.py:261
 #, python-brace-format
 msgid "{src} successfully restored"
 msgstr "{src} erfolgreich wiederhergestellt"
 
-#: views.py:258
+#: views.py:276
 #, python-brace-format
 msgid "{src} successfully restored to {dest}"
 msgstr "{src} erfolgreich wiederhergestellt in {dest}"
 
-#: views.py:301 views.py:332
+#: views.py:320 views.py:351
 #, python-brace-format
 msgid "Backup of {path} successfully completed"
 msgstr "Sicherung von {path} erfolgreich durchgeführt"
 
-#: views.py:380
+#: views.py:399
 msgid ""
 "You need to set the download path in localsetting.py to enable downloads"
 msgstr ""

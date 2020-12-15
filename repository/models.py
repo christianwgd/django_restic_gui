@@ -86,3 +86,18 @@ class Journal(models.Model):
     action = models.CharField(max_length=2, choices=ACTION_CHOICES, verbose_name=_('Action'))
     repo = models.ForeignKey(Repository, on_delete=models.DO_NOTHING, verbose_name=_('Repository'))
     data = models.CharField(max_length=200, verbose_name=_('Data'))
+
+
+class RepoSize(models.Model):
+
+    class Meta:
+        verbose_name = _('Repository Size')
+        verbose_name_plural = _('Repository Sizes')
+        ordering = ['timestamp']
+
+    def __str__(self):
+        return '{} {}'.format(self.timestamp, self.repo)
+
+    timestamp = models.DateTimeField(auto_now_add=True, verbose_name=_('Timestamp'))
+    size = models.PositiveBigIntegerField(verbose_name=_('Size'))
+    repo = models.ForeignKey(Repository, on_delete=models.DO_NOTHING, verbose_name=_('Repository'))

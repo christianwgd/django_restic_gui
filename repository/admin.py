@@ -1,10 +1,10 @@
 from django.contrib import admin
 
-from repository.models import Repository, FileType, FileExt
+from repository.models import Repository, FileType, FileExt, RepoSize
 
 
 @admin.register(Repository)
-class MenuAdmin(admin.ModelAdmin):
+class RepositoryAdmin(admin.ModelAdmin):
 
     list_display = ['name', 'path']
     search_fields = ['name']
@@ -30,3 +30,9 @@ class FileExtAdmin(admin.ModelAdmin):
     list_filter = ['type']
     search_fields = ['name']
 
+@admin.register(RepoSize)
+class RepoSizeAdmin(admin.ModelAdmin):
+
+    list_display = ['timestamp', 'repo', 'size']
+    list_filter = ['repo']
+    search_fields = ['repo']

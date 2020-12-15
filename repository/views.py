@@ -11,16 +11,17 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import FileResponse
+from django.http import FileResponse, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils.formats import date_format
 from django.utils.text import slugify
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
 from django.utils.translation import gettext_lazy as _
 
 from repository.callstack import push, delete_to, clear, peek
 from repository.forms import RestoreForm, RepositoryForm, NewBackupForm
-from repository.models import Repository, CallStack, Journal
+from repository.models import Repository, CallStack, Journal, RepoSize
 
 
 def restic_command(repo, command):
@@ -49,6 +50,10 @@ def get_directory_size(directory):
     return total
 
 
+def LogRepoSize(repo):
+    RepoSize.objects.create(repo=repo, size=get_directory_size(repo.path))
+
+
 class RepositoryList(LoginRequiredMixin, ListView):
     model = Repository
 
@@ -59,15 +64,15 @@ class RepositoryList(LoginRequiredMixin, ListView):
     def get_queryset(self):
         qs = Repository.objects.all()
         for repo in qs:
-            repo.size = humanize.naturalsize(get_directory_size(repo.path), binary=True)
+            repo.size = humanize.naturalsize(get_directory_size(repo.path), binary=False)
         return qs
 
     def get_context_data(self, *, object_list=None, **kwargs):
         ctx = super(RepositoryList, self).get_context_data(**kwargs)
         total, used, free = shutil.disk_usage(settings.LOCAL_BACKUP_PATH)
-        ctx['total'] = humanize.naturalsize(total, binary=True)
-        ctx['used'] = humanize.naturalsize(used, binary=True)
-        ctx['free'] = humanize.naturalsize(free, binary=True)
+        ctx['total'] = humanize.naturalsize(total, binary=False)
+        ctx['used'] = humanize.naturalsize(used, binary=False)
+        ctx['free'] = humanize.naturalsize(free, binary=False)
         ctx['ratio'] = ratio = int(used / total * 100)
         ctx['freeratio'] = 100 - ratio
         if ratio < 50:
@@ -77,6 +82,27 @@ class RepositoryList(LoginRequiredMixin, ListView):
         else:
             ctx['bar_class'] = 'bg-danger'
         return ctx
+
+
+class RepositoryChart(LoginRequiredMixin, DetailView):
+    model = Repository
+    template_name = 'repository/repository_chart.html'
+
+
+def human_size(bytes, units=[' bytes','KB','MB','GB','TB', 'PB', 'EB']):
+    """ Returns a human readable string representation of bytes """
+    return str(bytes) + units[0] if bytes < 1024 else human_size(bytes>>10, units[1:])
+
+
+def repository_chart(request, repo_id=None):
+    labels = []
+    data = []
+    data_list = RepoSize.objects.filter(repo__pk=repo_id)
+    unit = 'MB'
+    for item in data_list:
+        labels.append(date_format(item.timestamp, "SHORT_DATETIME_FORMAT"))
+        data.append(item.size/1024/1024)
+    return JsonResponse(data={'labels': labels, 'data': data, 'unit': unit})
 
 
 class RepositoryUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -293,6 +319,7 @@ class BackupView(LoginRequiredMixin, DetailView):
             action='1',
             data=path
         )
+        LogRepoSize(repo)
         messages.success(self.request,
             _('Backup of {path} successfully completed'.format(
                  path=path,

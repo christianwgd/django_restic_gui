@@ -15,4 +15,6 @@ urlpatterns = [
     path('backup/<int:pk>/', views.BackupView.as_view(), name='backup'),
     path('newbackup/<int:pk>/', views.NewBackupView.as_view(), name='newbackup'),
     path('journal/', views.JournalView.as_view(), name='journal'),
+    path('chart/<int:pk>/', views.RepositoryChart.as_view(), name='chart'),
+    path('get_chart/<int:repo_id>/', views.repository_chart, name='get_chart'),
 ]

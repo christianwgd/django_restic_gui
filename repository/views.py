@@ -89,19 +89,14 @@ class RepositoryChart(LoginRequiredMixin, DetailView):
     template_name = 'repository/repository_chart.html'
 
 
-def human_size(bytes, units=[' bytes','KB','MB','GB','TB', 'PB', 'EB']):
-    """ Returns a human readable string representation of bytes """
-    return str(bytes) + units[0] if bytes < 1024 else human_size(bytes>>10, units[1:])
-
-
 def repository_chart(request, repo_id=None):
     labels = []
     data = []
     data_list = RepoSize.objects.filter(repo__pk=repo_id)
-    unit = 'MB'
+    unit = 'GB'
     for item in data_list:
         labels.append(date_format(item.timestamp, "SHORT_DATETIME_FORMAT"))
-        data.append(item.size/1024/1024)
+        data.append(item.size/float(1 << 30))
     return JsonResponse(data={'labels': labels, 'data': data, 'unit': unit})
 
 

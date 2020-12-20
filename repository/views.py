@@ -95,7 +95,7 @@ def repository_chart(request, repo_id=None):
     data_list = RepoSize.objects.filter(repo__pk=repo_id)
     unit = 'GB'
     for item in data_list:
-        labels.append(date_format(item.timestamp, "SHORT_DATETIME_FORMAT"))
+        labels.append(date_format(item.timestamp, "SHORT_DATE_FORMAT"))
         data.append(item.size/float(1 << 30))
     return JsonResponse(data={'labels': labels, 'data': data, 'unit': unit})
 

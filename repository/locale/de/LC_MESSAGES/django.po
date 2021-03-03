@@ -196,7 +196,7 @@ msgstr "Repository Größenentwicklung"
 
 #: templates/repository/repository_form.html:14
 msgid "Change repository"
-msgstr "Repository wechseln"
+msgstr "Repository ändern"
 
 #: templates/repository/repository_form.html:16
 msgid "Create repository"

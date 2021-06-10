@@ -1,6 +1,6 @@
-Django==3.2.2
+Django==3.2.4
 django-bootstrap4==3.0.1
 django-bootstrap-breadcrumbs==0.9.2
 django-bootstrap-modal-forms==2.2.0
-humanize==3.5.0
+humanize==3.7.1
 python-dateutil==2.8.1

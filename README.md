@@ -73,11 +73,6 @@ Run migrations:
 $ python manage.py migrate
 ```
 
-Initialize data:
-```bash
-$ python manage.py loaddata users posts comments
-```
-
 Run server on port 8000:
 ```bash
 $ python manage.py runserver 8000

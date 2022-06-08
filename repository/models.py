@@ -1,7 +1,7 @@
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from encrypted_model_fields.fields import EncryptedCharField
 
 
 class Repository(models.Model):
@@ -14,14 +14,15 @@ class Repository(models.Model):
         return self.name
 
     name = models.CharField(max_length=100, verbose_name=_('Name'))
-    password = models.CharField(max_length=100, verbose_name=_('Password'))
-    # path = models.FilePathField(
-    #     allow_files=False, allow_folders=True,
-    #     verbose_name=_('Path'), path=settings.LOCAL_BACKUP_PATH
-    # )
-    # Treat path as a generic CharField so we can accept either local paths or connection strings
-    path = models.CharField(max_length=256, null=False, blank=True,
-        help_text=_('Enter either a local path or the connection string for a remote backup repo, i.e.: "sftp:remote_backup:restic"'))
+    password = EncryptedCharField(max_length=100, verbose_name=_('Password'))
+    # Treat path as a generic CharField, so we can accept either local paths or connection strings
+    path = models.CharField(
+        max_length=256, null=False, blank=True,
+        help_text=_(
+            'Enter either a local path or the connection string for '
+            'remote backup repo, i.e.: "sftp:remote_backup:restic"'
+        )
+    )
 
 
 class CallStack(models.Model):
@@ -30,7 +31,7 @@ class CallStack(models.Model):
         ordering = ['level']
 
     def __str__(self):
-        return '{} {}'.format(self.level, self.name)
+        return f'{self.level} {self.name}'
 
     level = models.PositiveIntegerField(default=0, unique=True)
     name = models.CharField(max_length=100)
@@ -82,7 +83,7 @@ class Journal(models.Model):
         ordering = ['-timestamp']
 
     def __str__(self):
-        return '{} {}'.format(self.timestamp, self.repo)
+        return f'{self.timestamp} {self.repo}'
 
     user = models.ForeignKey(User, verbose_name=_('User'), on_delete=models.DO_NOTHING)
     timestamp = models.DateTimeField(auto_now_add=True, verbose_name=_('Timestamp'))
@@ -99,7 +100,7 @@ class RepoSize(models.Model):
         ordering = ['timestamp']
 
     def __str__(self):
-        return '{} {}'.format(self.timestamp, self.repo)
+        return f'{self.timestamp} {self.repo}'
 
     timestamp = models.DateTimeField(auto_now_add=True, verbose_name=_('Timestamp'))
     size = models.PositiveBigIntegerField(verbose_name=_('Size'))

@@ -34,3 +34,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LOCAL_BACKUP_PATH = '/path/to/your/backups/'
 # temporary path for downloads
 TEMP_PATH = '/path/to/temp/dir/'
+
+# encryption key for restic repository passwords
+# see https://pypi.org/project/django-encrypted-model-fields/
+FIELD_ENCRYPTION_KEY = 'insecure_encryption_key'

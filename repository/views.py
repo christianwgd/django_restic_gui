@@ -27,6 +27,8 @@ from repository.models import Repository, CallStack, Journal, RepoSize
 def restic_command(repo, command):
     my_env = os.environ.copy()
     my_env["RESTIC_PASSWORD"] = repo.password
+    if settings.DEBUG:
+        print('Issue restic_command: "%s"' % command)
     return subprocess.run(command, stdout=subprocess.PIPE, env=my_env)
 
 
@@ -44,7 +46,7 @@ def get_directory_size(directory):
     except NotADirectoryError:
         # if `directory` isn't a directory, get the file size then
         return os.path.getsize(directory)
-    except PermissionError:
+    except (PermissionError, FileNotFoundError):
         # if for whatever reason we can't open the folder, return 0
         return 0
     return total
@@ -69,11 +71,16 @@ class RepositoryList(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         ctx = super(RepositoryList, self).get_context_data(**kwargs)
-        total, used, free = shutil.disk_usage(settings.LOCAL_BACKUP_PATH)
+        try:
+            total, used, free = shutil.disk_usage(settings.LOCAL_BACKUP_PATH)
+            ratio = int(used / total * 100)
+        except FileNotFoundError as e:
+            total, used, free = 0, 0, 0
+            ratio = 0
         ctx['total'] = humanize.naturalsize(total, binary=False)
         ctx['used'] = humanize.naturalsize(used, binary=False)
         ctx['free'] = humanize.naturalsize(free, binary=False)
-        ctx['ratio'] = ratio = int(used / total * 100)
+        ctx['ratio'] = ratio
         ctx['freeratio'] = 100 - ratio
         if ratio < 50:
             ctx['bar_class'] = 'bg-success'
@@ -135,7 +142,7 @@ class RepositoryCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
         form.instance.path = path
         return super(RepositoryCreate, self).form_valid(form)
-        
+
 
 
 class RepositorySnapshots(LoginRequiredMixin, DetailView):

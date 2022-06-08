@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n static bootstrap4 django_bootstrap_breadcrumbs %}
+{% load i18n static bootstrap4 django_bootstrap_breadcrumbs repo_tags %}
 
 {% block bootstrap4_extra_head %}
 {{ block.super }}
@@ -40,6 +40,8 @@ $(document).ready(function() {
     </div>
 </div>
 
+{% settings_value 'LOCAL_BACKUP_PATH' as LOCAL_BACKUP_PATH %}
+{% if LOCAL_BACKUP_PATH %}
 <div class="row diskusage">
     <div class="col-md-2 col-12">
         <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-hdd" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -62,6 +64,7 @@ $(document).ready(function() {
         </div>
     </div>
 </div>
+{% endif %}
 
 <div class="row">
     <div class="col-12">
@@ -117,6 +120,7 @@ $(document).ready(function() {
     </div>
 </div>
 
+{% if LOCAL_BACKUP_PATH %}
 <div class="row" style="margin-top: 1rem;">
     <div class="col-12">
         <a class="btn btn-success" href="{% url 'repository:create' %}" role="button">
@@ -126,5 +130,6 @@ $(document).ready(function() {
         </a>
     </div>
 </div>
+{% endif %}
 
 {% endblock %}

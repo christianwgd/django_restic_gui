@@ -15,10 +15,13 @@ class Repository(models.Model):
 
     name = models.CharField(max_length=100, verbose_name=_('Name'))
     password = models.CharField(max_length=100, verbose_name=_('Password'))
-    path = models.FilePathField(
-        allow_files=False, allow_folders=True,
-        verbose_name=_('Path'), path=settings.LOCAL_BACKUP_PATH
-    )
+    # path = models.FilePathField(
+    #     allow_files=False, allow_folders=True,
+    #     verbose_name=_('Path'), path=settings.LOCAL_BACKUP_PATH
+    # )
+    # Treat path as a generic CharField so we can accept either local paths or connection strings
+    path = models.CharField(max_length=256, null=False, blank=True,
+        help_text=_('Enter either a local path or the connection string for a remote backup repo, i.e.: "sftp:remote_backup:restic"'))
 
 
 class CallStack(models.Model):

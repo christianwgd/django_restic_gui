@@ -23,6 +23,27 @@ class Repository(models.Model):
             'remote backup repo, i.e.: "sftp:remote_backup:restic"'
         )
     )
+    extra_keys = models.TextField(
+        null=False, blank=True,
+        help_text=_(
+            "List KEY=VALUE pairs to be added to the env when connecting with this repo;"
+            " place each key/value pair on it's own line"
+        )
+    )
+
+    def extra_keys_as_dict(self):
+        """
+        Parse "extra_key" field;
+        lines formatted as KEY=VALUE will be inserted in the resulting dictionary;
+        unrecognized lines will be just ignored
+        """
+        result = {}
+        lines = self.extra_keys.splitlines()
+        for line in lines:
+            tokens = [t.strip() for t in line.split('=')]
+            if len(tokens) == 2:
+                result[tokens[0]] = tokens[1]
+        return result
 
 
 class CallStack(models.Model):

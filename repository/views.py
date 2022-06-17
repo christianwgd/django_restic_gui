@@ -27,8 +27,7 @@ from repository.models import Repository, CallStack, Journal, RepoSize
 def restic_command(repo, command):
     my_env = os.environ.copy()
     my_env["RESTIC_PASSWORD"] = repo.password
-    extra_keys = repo.extra_keys_as_dict()
-    for key, value in extra_keys.items():
+    for key, value in repo.extra_keys.items():
         my_env[key] = value
 
     if settings.DEBUG:

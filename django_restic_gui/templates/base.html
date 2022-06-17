@@ -22,14 +22,24 @@
 <meta name="theme-color" content="#ffffff">
 <link href="{% static 'css/style.css' %}" rel="stylesheet">
 <style>
-.nav-link svg {
-    margin-top: -3px;
-}
+    .nav-link svg {
+        margin-top: -3px;
+    }
+    body.wip {
+        opacity: 0.5;
+    }
+    body.wip #wip-spinner {
+        display: block !important;
+        margin: 0 20px;
+    }
 </style>
 {% endblock %}
 
 {% block bootstrap4_extra_script %}
 {{ block.super }}
+<script>
+    function wip() {$('body').addClass('wip')}
+</script>
 {% endblock %}
 
 {% block bootstrap4_title %}Restic GUI{% endblock %}
@@ -38,6 +48,9 @@
 
 <!-- Content -->
 <nav class="navbar navbar-expand-md navbar-light bg-light">
+    <div id="wip-spinner" style="display: none;"; class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
     <a class="navbar-brand" href="{% url 'home' %}">
         <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" class="bi bi-file-earmark-lock" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
           <path d="M4 0h5.5v1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h1V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2z"/>

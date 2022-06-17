@@ -64,7 +64,7 @@ $(document).ready(function() {
                     {% for path in snap.paths %}
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
-                            <a href="{% url 'repository:browse' object.id 'icon' %}?id={{ snap.short_id }}&path={{ path }}">
+                            <a onclick="wip()" href="{% url 'repository:browse' object.id 'icon' %}?id={{ snap.short_id }}&path={{ path }}">
                                 {{ path }}
                             </a>
                             <i class="float-right restore" title="{% trans 'Restore' %}" data-url="{% url 'repository:restore' object.id 'icon' %}" data-id="{{ snap.short_id }}" data-path="{{ path }}">

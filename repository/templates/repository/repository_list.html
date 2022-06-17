@@ -83,7 +83,7 @@ $(document).ready(function() {
                     {% for repo in repository_list %}
                     <tr>
                         <td>
-                            <a class="tool" href="{% url 'repository:snapshots' repo.id %}" title="{% trans 'Snapshots' %}">
+                            <a class="tool" onclick="wip()" href="{% url 'repository:snapshots' repo.id %}" title="{% trans 'Snapshots' %}">
                                 {{ repo.name }}
                             </a>
                         </td>

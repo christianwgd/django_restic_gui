@@ -27,9 +27,16 @@ from repository.models import Repository, CallStack, Journal, RepoSize
 def restic_command(repo, command):
     my_env = os.environ.copy()
     my_env["RESTIC_PASSWORD"] = repo.password
+    for key, value in repo.extra_keys.items():
+        my_env[key] = value
+
     if settings.DEBUG:
         print('Issue restic_command: "%s"' % command)
-    return subprocess.run(command, stdout=subprocess.PIPE, env=my_env)
+    #return subprocess.run(command, stdout=subprocess.PIPE, env=my_env, capture_output=True)
+
+    # Capture stderr so we can later display usefull messages in case of error
+    # capture_output=True requires Python 3.7 or higher
+    return subprocess.run(command, env=my_env, capture_output=True)
 
 
 def get_directory_size(directory):
@@ -156,13 +163,16 @@ class RepositorySnapshots(LoginRequiredMixin, DetailView):
 
         command = ['restic', '-r', repo.path, 'snapshots', '--json']
         result = restic_command(repo, command)
-        snapshots = json.loads(result.stdout, object_hook=lambda d: SimpleNamespace(**d))
-        if snapshots is not None:
-            for snap in snapshots:
-                snap.timestamp = parse(snap.time)
-            ctx['snapshots'] = reversed(snapshots)
-        else:
-            ctx['snapshots'] = None
+        ctx['snapshots'] = None
+        try:
+            snapshots = json.loads(result.stdout, object_hook=lambda d: SimpleNamespace(**d))
+            if snapshots is not None:
+                for snap in snapshots:
+                    snap.timestamp = parse(snap.time)
+                ctx['snapshots'] = reversed(snapshots)
+        except json.JSONDecodeError:
+            # Hopefully, something usefull can be retrieved from stdout
+            messages.error(self.request, result.stderr.decode())
         return ctx
 
 

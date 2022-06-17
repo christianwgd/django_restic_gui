@@ -23,6 +23,12 @@ class Repository(models.Model):
             'remote backup repo, i.e.: "sftp:remote_backup:restic"'
         )
     )
+    extra_keys = models.JSONField(null=False, blank=True, default=dict,
+        help_text=_(
+            "List KEY=VALUE pairs to be added to the env when connecting with this repo;"
+            " place each key/value pair on it's own line"
+        )
+    )
 
 
 class CallStack(models.Model):

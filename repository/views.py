@@ -60,7 +60,15 @@ def get_directory_size(directory):
 
 
 def LogRepoSize(repo):
-    RepoSize.objects.create(repo=repo, size=get_directory_size(repo.path))
+    command = ['restic', '-r', repo.path, 'stats', '--json']
+    result = restic_command(repo, command)
+    data = json.loads(result.stdout)
+    #RepoSize.objects.create(repo=repo, size=get_directory_size(repo.path))
+    RepoSize.objects.create(
+        repo=repo,
+        size=data['total_size'],
+        file_count=data['total_file_count'],
+    )
 
 
 class RepositoryList(LoginRequiredMixin, ListView):

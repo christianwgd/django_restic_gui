@@ -9,18 +9,73 @@
 
 {% block bootstrap4_extra_script %}
 {{ block.super }}
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@^2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@^1"></script>
 <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
 <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table-locale-all.min.js"></script>
 <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/extensions/mobile/bootstrap-table-mobile.min.js"></script>
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+
 <script>
 $(document).ready(function() {
+
     $(".newbackup").each(function() {
         $(this).modalForm({
             formURL: $(this).data('url'),
             modalID: "#backupModal"
         });
     });
+
+    var $repositoryChart = $("#repository-chart");
+    $.ajax({
+        url: $repositoryChart.data("url"),
+        success: function (data) {
+            var ctx = $repositoryChart[0].getContext("2d");
+            //console.log(data);
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                     datasets: data.datasets
+                },
+                options: {
+                    scales: {
+                        xAxes: {
+                            type: 'time',
+                            time: {
+                                unit: data.time_unit
+                            },
+                            position: 'bottom'
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'GB'
+                            }
+                        },
+                        y2: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'n.'
+                            }
+                        }
+                    },
+                    responsive: true,
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            });
+        }
+    });
+
 });
 </script>
 {% endblock %}
@@ -65,6 +120,10 @@ $(document).ready(function() {
     </div>
 </div>
 {% endif %}
+
+<div id="container" style="width: 100%;">
+    <canvas id="repository-chart" data-url="{% url 'repository:get_charts' %}"></canvas>
+</div>
 
 <div class="row">
     <div class="col-12">

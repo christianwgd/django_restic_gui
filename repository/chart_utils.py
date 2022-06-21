@@ -17,7 +17,7 @@ def repo_datasets(index, repo):
     datasets = [{
         'label': '"%s" %s' % (repo.name, _('size [GB]')),
         'yAxisID': 'y1',
-        'fill': True,
+        'fill': False,
         'pointRadius': 3.0,
         'borderColor': fg,
         'pointBackgroundColor': fg,

@@ -130,6 +130,15 @@ def repository_chart(request, repo_id=None):
     return JsonResponse({'datasets':datasets, 'time_unit': time_unit})
 
 
+def repository_charts(request):
+    datasets = []
+    repos = Repository.objects.all()
+    for index, repo in enumerate(repos):
+        d, time_unit = repo_datasets(index, repo)
+        datasets += d
+    return JsonResponse({'datasets':datasets, 'time_unit': time_unit})
+
+
 class RepositoryUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Repository
     form_class = RepositoryForm

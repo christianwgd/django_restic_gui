@@ -10,7 +10,9 @@
 {% block bootstrap4_extra_script %}
 {{ block.super }}
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@^2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@^1"></script>
 <script>
 
     $(function () {
@@ -21,37 +23,71 @@
 
                 var ctx = $repositoryChart[0].getContext("2d");
 
+                // new Chart(ctx, {
+                //     type: 'line',
+                //     data: {
+                //         datasets: data.datasets
+                //     },
+                //     options: {
+                //         scales: {
+                //             yAxes: [{
+                //                 ticks: {
+                //                     beginAtZero: false
+                //                 },
+                //                 scaleLabel: {
+                //                     display: true,
+                //                     labelString: data.unit
+                //                 }
+                //             }]
+                //         },
+                //         responsive: true,
+                //         legend: {
+                //             position: 'top',
+                //         },
+                //         title: {
+                //             display: true,
+                //             text: "{% trans 'Repository size development' %}"
+                //         }
+                //     }
+                // });
+
+                //console.log(data.datasets);
                 new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: data.labels,
-                        datasets: [{
-                            label: "{% trans 'Repository size' %}",
-                            lineTension: 0.2,
-                            borderColor: 'blue',
-                            fill: false,
-                            data: data.data
-                        }]
+                         datasets: data.datasets
                     },
                     options: {
                         scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: false
+                            xAxes: {
+                                type: 'time',
+                                time: {
+                                    unit: data.time_unit
                                 },
-                                scaleLabel: {
+                                position: 'bottom'
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                title: {
                                     display: true,
-                                    labelString: data.unit
+                                    text: 'GB'
                                 }
-                            }]
+                            },
+                            y2: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                title: {
+                                    display: true,
+                                    text: 'n.'
+                                }
+                            }
                         },
                         responsive: true,
                         legend: {
                             position: 'top',
-                        },
-                        title: {
-                            display: true,
-                            text: "{% trans 'Repository size development' %}"
                         }
                     }
                 });

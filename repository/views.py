@@ -22,6 +22,7 @@ from django.utils.translation import gettext_lazy as _
 from repository.callstack import push, delete_to, clear, peek
 from repository.forms import RestoreForm, RepositoryForm, NewBackupForm
 from repository.models import Repository, CallStack, Journal, RepoSize
+from .chart_utils import repo_datasets
 
 
 def restic_command(repo, command):
@@ -111,15 +112,22 @@ class RepositoryChart(LoginRequiredMixin, DetailView):
     template_name = 'repository/repository_chart.html'
 
 
+# def repository_chart(request, repo_id=None):
+#     labels = []
+#     data = []
+#     data_list = RepoSize.objects.filter(repo__pk=repo_id)
+#     unit = 'GB'
+#     for item in data_list:
+#         labels.append(date_format(item.timestamp, "SHORT_DATE_FORMAT"))
+#         data.append(item.size/float(1 << 30))
+#     return JsonResponse(data={'labels': labels, 'data': data, 'unit': unit})
+
+
 def repository_chart(request, repo_id=None):
-    labels = []
-    data = []
-    data_list = RepoSize.objects.filter(repo__pk=repo_id)
-    unit = 'GB'
-    for item in data_list:
-        labels.append(date_format(item.timestamp, "SHORT_DATE_FORMAT"))
-        data.append(item.size/float(1 << 30))
-    return JsonResponse(data={'labels': labels, 'data': data, 'unit': unit})
+    repo = Repository.objects.get(id=repo_id)
+    index = 0
+    datasets, time_unit = repo_datasets(index, repo)
+    return JsonResponse({'datasets':datasets, 'time_unit': time_unit})
 
 
 class RepositoryUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):

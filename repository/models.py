@@ -111,4 +111,4 @@ class RepoSize(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True, verbose_name=_('Timestamp'))
     size = models.PositiveBigIntegerField(verbose_name=_('Size'))
     file_count = models.PositiveBigIntegerField(verbose_name=_('File count'))
-    repo = models.ForeignKey(Repository, on_delete=models.DO_NOTHING, verbose_name=_('Repository'))
+    repo = models.ForeignKey(Repository, on_delete=models.CASCADE, verbose_name=_('Repository'))

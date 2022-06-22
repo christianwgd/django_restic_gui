@@ -33,6 +33,6 @@ class FileExtAdmin(admin.ModelAdmin):
 @admin.register(RepoSize)
 class RepoSizeAdmin(admin.ModelAdmin):
 
-    list_display = ['timestamp', 'repo', 'size']
+    list_display = ['timestamp', 'repo', 'size', 'file_count', ]
     list_filter = ['repo']
     search_fields = ['repo']

@@ -1,3 +1,4 @@
+import time
 from django.core.management.base import BaseCommand, CommandError
 from django.utils.translation import gettext_lazy as _
 
@@ -19,20 +20,33 @@ class Command(BaseCommand):
         if options['repo']:
             try:
                 repo = Repository.objects.get(name=options['repo'])
+                self.log_stats_for_repo(repo)
             except Repository.DoesNotExist:
                 raise CommandError(_('Repository does not exist: {}'.format(options['repo'])))
-            LogRepoSize(repo)
-            self.stdout.write(
-                self.style.SUCCESS(
-                    _('Successfully logged size for {}'.format(options['repo']))
-                )
-            )
         else:
             repos = Repository.objects.all()
             for repo in repos:
-                LogRepoSize(repo)
+                self.log_stats_for_repo(repo)
+
+    def log_stats_for_repo(self, repo):
+        t0 = time.time()
+        self.stdout.write(
+            self.style.SUCCESS(
+                '%s "%s" ...' % (_('Logging stats for repository'), repo.name)
+            )
+        )
+        try:
+            LogRepoSize(repo)
+            time.sleep(1)
+            t1 = time.time()
             self.stdout.write(
                 self.style.SUCCESS(
-                    _('Successfully logged size for all repositories')
+                    _('done in %.2f seconds') % (t1 - t0)
+                )
+            )
+        except Exception as e:
+            self.stdout.write(
+                self.style.ERROR(
+                    str(e)
                 )
             )

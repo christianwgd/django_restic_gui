@@ -85,6 +85,18 @@ class RepositoryList(LoginRequiredMixin, ListView):
             repo.size = humanize.naturalsize(get_directory_size(repo.path), binary=False)
         return qs
 
+    def collect_chart_datasets(self):
+        chart_datasets = []
+        repos = Repository.objects.all()
+        for index, repo in enumerate(repos):
+            datasets, time_unit = repo_datasets(index, repo)
+            chart_datasets.append({
+                'repo': repo,
+                'datasets': json.dumps(datasets),
+                'time_unit': time_unit,
+            })
+        return chart_datasets
+
     def get_context_data(self, *, object_list=None, **kwargs):
         ctx = super(RepositoryList, self).get_context_data(**kwargs)
         try:
@@ -104,6 +116,7 @@ class RepositoryList(LoginRequiredMixin, ListView):
             ctx['bar_class'] = 'bg-warning'
         else:
             ctx['bar_class'] = 'bg-danger'
+        ctx['chart_datasets'] = self.collect_chart_datasets()
         return ctx
 
 
@@ -127,15 +140,6 @@ def repository_chart(request, repo_id=None):
     repo = Repository.objects.get(id=repo_id)
     index = 0
     datasets, time_unit = repo_datasets(index, repo)
-    return JsonResponse({'datasets':datasets, 'time_unit': time_unit})
-
-
-def repository_charts(request):
-    datasets = []
-    repos = Repository.objects.all()
-    for index, repo in enumerate(repos):
-        d, time_unit = repo_datasets(index, repo)
-        datasets += d
     return JsonResponse({'datasets':datasets, 'time_unit': time_unit})
 
 
@@ -246,6 +250,7 @@ class FileBrowse(LoginRequiredMixin, DetailView):
         ctx['path_list'] = pathlist
         ctx['current'] = peek()
         ctx['stack'] = CallStack.objects.all()
+
         return ctx
 
 

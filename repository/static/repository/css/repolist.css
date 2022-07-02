@@ -15,3 +15,7 @@
     color:#666666;
     background-color: #eeeeee;
 }
+
+.chart-container {
+    border: 1px solid red;
+}

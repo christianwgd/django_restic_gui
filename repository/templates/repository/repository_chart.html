@@ -81,13 +81,20 @@
                                 position: 'right',
                                 title: {
                                     display: true,
-                                    text: 'n.'
+                                    text: 'K files'
                                 }
                             }
                         },
                         responsive: true,
-                        legend: {
-                            position: 'top',
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                display: false
+                            },
+                            title: {
+                                display: true,
+                                text: '{{repository}}'
+                            }
                         }
                     }
                 });

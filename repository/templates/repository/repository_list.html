@@ -28,53 +28,51 @@ $(document).ready(function() {
         });
     });
 
-    var $repositoryChart = $("#repository-chart");
-    $.ajax({
-        url: $repositoryChart.data("url"),
-        success: function (data) {
-            var ctx = $repositoryChart[0].getContext("2d");
-            //console.log(data);
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                     datasets: data.datasets
-                },
-                options: {
-                    scales: {
-                        xAxes: {
-                            type: 'time',
-                            time: {
-                                unit: data.time_unit
-                            },
-                            position: 'bottom'
+    {% for chart_dataset in chart_datasets %}
+        var $repositoryChart = $("#repository-chart-{{forloop.counter0}}");
+        var ctx = $repositoryChart[0].getContext("2d");
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                 datasets: {{ chart_dataset.datasets|safe }}
+            },
+            options: {
+                scales: {
+                    xAxes: {
+                        type: 'time',
+                        time: {
+                            unit: '{{ chart_dataset.time_unit }}'
                         },
-                        y1: {
-                            type: 'linear',
+                        position: 'bottom'
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
                             display: true,
-                            position: 'left',
-                            title: {
-                                display: true,
-                                text: 'GB'
-                            }
-                        },
-                        y2: {
-                            type: 'linear',
-                            display: true,
-                            position: 'right',
-                            title: {
-                                display: true,
-                                text: 'n.'
-                            }
+                            text: 'GB'
                         }
                     },
-                    responsive: true,
+                    y2: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'K files'
+                        }
+                    }
+                },
+                responsive: true,
+                plugins: {
                     legend: {
-                        position: 'top',
+                        display: false
                     }
                 }
-            });
-        }
-    });
+            }
+        });
+    {% endfor %}
 
 });
 </script>
@@ -90,7 +88,6 @@ $(document).ready(function() {
 <div class="modal fade" tabindex="-1" role="dialog" id="backupModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-
         </div>
     </div>
 </div>
@@ -121,8 +118,19 @@ $(document).ready(function() {
 </div>
 {% endif %}
 
-<div id="container" style="width: 100%;">
-    <canvas id="repository-chart" data-url="{% url 'repository:get_charts' %}"></canvas>
+<div class="row">
+    {% for chart_dataset in chart_datasets %}
+    <div class="col-xs-12 col-sm-6 col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"><a href="{% url 'repository:chart' chart_dataset.repo.id %}">{{ chart_dataset.repo }}</a></h5>
+                <p class="card-text">
+                    <canvas id="repository-chart-{{forloop.counter0}}"></canvas>
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 </div>
 
 <div class="row">

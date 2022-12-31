@@ -33,7 +33,7 @@ def restic_command(repo, command):
 
     if settings.DEBUG:
         print('Issue restic_command: "%s"' % command)
-    #return subprocess.run(command, stdout=subprocess.PIPE, env=my_env, capture_output=True)
+    # return subprocess.run(command, stdout=subprocess.PIPE, env=my_env, capture_output=True)
 
     # Capture stderr so we can later display usefull messages in case of error
     # capture_output=True requires Python 3.7 or higher
@@ -64,7 +64,7 @@ def LogRepoSize(repo):
     command = ['restic', '-r', repo.path, 'stats', '--json']
     result = restic_command(repo, command)
     data = json.loads(result.stdout)
-    #RepoSize.objects.create(repo=repo, size=get_directory_size(repo.path))
+    # RepoSize.objects.create(repo=repo, size=get_directory_size(repo.path))
     RepoSize.objects.create(
         repo=repo,
         size=data['total_size'],
@@ -140,7 +140,7 @@ def repository_chart(request, repo_id=None):
     repo = Repository.objects.get(id=repo_id)
     index = 0
     datasets, time_unit = repo_datasets(index, repo)
-    return JsonResponse({'datasets':datasets, 'time_unit': time_unit})
+    return JsonResponse({'datasets': datasets, 'time_unit': time_unit})
 
 
 class RepositoryUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -178,7 +178,6 @@ class RepositoryCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
         form.instance.path = path
         return super(RepositoryCreate, self).form_valid(form)
-
 
 
 class RepositorySnapshots(LoginRequiredMixin, DetailView):
@@ -363,10 +362,10 @@ class BackupView(LoginRequiredMixin, DetailView):
         )
         LogRepoSize(repo)
         messages.success(self.request,
-            _('Backup of {path} successfully completed'.format(
-                 path=path,
-            )),
-        )
+                         _('Backup of {path} successfully completed'.format(
+                             path=path,
+                         )),
+                         )
         return redirect(self.get_success_url())
 
 
@@ -394,10 +393,10 @@ class NewBackupView(LoginRequiredMixin, BSModalFormView):
                 data='{} --> {}'.format(path)
             )
             messages.success(self.request,
-                _('Backup of {path} successfully completed'.format(
-                    path=path,
-                )),
-            )
+                             _('Backup of {path} successfully completed'.format(
+                                 path=path,
+                             )),
+                             )
         return redirect(self.get_success_url())
 
 
@@ -482,4 +481,3 @@ class Download(DetailView):
         os.remove(zip_fullpath)
         shutil.rmtree(download_path)
         return resp
-

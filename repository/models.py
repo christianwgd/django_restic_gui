@@ -1,11 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from encrypted_model_fields.fields import EncryptedCharField, EncryptedMixin
-
-
-class EncryptedJSONField(EncryptedMixin, models.JSONField):
-    pass
+from encrypted_json_fields.fields import EncryptedCharField, EncryptedJSONField
 
 
 class Repository(models.Model):

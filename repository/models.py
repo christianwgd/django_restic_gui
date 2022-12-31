@@ -55,7 +55,7 @@ class FileType(models.Model):
         return self.name
 
     name = models.CharField(max_length=50, verbose_name=_('Name'))
-    svg_path = models.CharField(max_length=500, verbose_name=_('SVG Path'))
+    svg_path = models.CharField(max_length=1000, verbose_name=_('SVG Path'))
 
 
 class FileExt(models.Model):

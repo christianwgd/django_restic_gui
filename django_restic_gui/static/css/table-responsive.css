@@ -1,0 +1,29 @@
+@media (max-width: 767px) {
+    .tbl-responsive th {
+        display: none;
+    }
+
+    .tbl-responsive td {
+        display: block;
+        padding: .25em .5em;
+    }
+
+    .tbl-responsive td:first-child {
+        padding-top: .5em;
+    }
+
+    .tbl-responsive td:last-child {
+        padding-bottom: .5em;
+    }
+
+    .tbl-responsive td:before {
+        content: attr(data-th) "";
+        font-weight: bold;
+        width: 9em;
+        display: inline-block;
+    }
+
+    .tbl-responsive td ul {
+        display: inline-block;
+    }
+}

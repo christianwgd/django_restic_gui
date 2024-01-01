@@ -9,16 +9,20 @@
 {% endblock %}
 
 {% block bootstrap5_extra_script %}
-<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+{{ block.super }}
+<script src="{% static 'js/bootstrap5.modal.forms.min.js' %}"></script>
 <script>
-$(document).ready(function() {
-    $(".restore").each(function() {
-        var url = $(this).data('url')+"?id="+$(this).data('id')+"&path="+$(this).data('path');
-        $(this).modalForm({
+document.addEventListener('DOMContentLoaded', (e) => {
+    let restoreLinks = document.getElementsByClassName("restore");
+    for (var index=0; index < restoreLinks.length; index++) {
+        restoreLink = restoreLinks[index];
+        let url = restoreLink.getAttribute('data-url')+"?id="+restoreLink.getAttribute('data-id')+"&path="+restoreLink.getAttribute('data-path');
+        console.log(url);
+        modalForm(restoreLink, {
             formURL: url,
             modalID: "#restoreModal"
         });
-    });
+    }
 });
 </script>
 {{ block.super }}
@@ -53,9 +57,9 @@ $(document).ready(function() {
 </div>
 
 <div class="row">
-    <div class="col-12">
-        <div class="card-deck justify-content-center">
-            {% for path in path_list %}
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4">
+    {% for path in path_list %}
+        <div class="col">
             <div class="card text-center">
                 <span class="action restore" title="{% trans 'Restore' %}" data-url="{% url 'repository:restore' object.id 'icon' %}" data-id="{{ snapshot.short_id }}" data-path="{{ path.path|urlencode:'' }}">
                     <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" class="bi bi-cloud-download" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -84,8 +88,8 @@ $(document).ready(function() {
                 <p class="card-text"><small class="text-muted">{{ path.name }}</small></p>
                 {% endif %}
             </div>
-            {% endfor %}
         </div>
+    {% endfor %}
     </div>
 </div>
 {% endblock %}

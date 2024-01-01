@@ -3,26 +3,27 @@
 
 {% block bootstrap5_extra_head %}
 {{ block.super }}
+<link rel="stylesheet" href="{% static 'css/table-responsive.css' %}">
 <link href="{% static 'repository/css/view_switch.css' %}" rel="stylesheet">
 <link href="{% static 'repository/css/list.css' %}" rel="stylesheet">
 <link href="{% static 'repository/css/modal.css' %}" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table.min.css">
 {% endblock %}
 
 {% block bootstrap5_extra_script %}
-<script src="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table.min.js"></script>
-<script src="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table-locale-all.min.js"></script>
-<script src="https://unpkg.com/bootstrap-table@1.20.2/dist/extensions/mobile/bootstrap-table-mobile.min.js"></script>
-<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+{{ block.super }}
+<script src="{% static 'js/bootstrap5.modal.forms.min.js' %}"></script>
 <script>
-$(document).ready(function() {
-    $(".restore").each(function() {
-        var url = $(this).data('url')+"?id="+$(this).data('id')+"&path="+$(this).data('path');
-        $(this).modalForm({
+document.addEventListener('DOMContentLoaded', (e) => {
+    let restoreLinks = document.getElementsByClassName("restore");
+    for (var index=0; index < restoreLinks.length; index++) {
+        restoreLink = restoreLinks[index];
+        let url = restoreLink.getAttribute('data-url')+"?id="+restoreLink.getAttribute('data-id')+"&path="+restoreLink.getAttribute('data-path');
+        console.log(url);
+        modalForm(restoreLink, {
             formURL: url,
             modalID: "#restoreModal"
         });
-    });
+    }
 });
 </script>
 {{ block.super }}
@@ -58,8 +59,7 @@ $(document).ready(function() {
 
 <div class="row">
     <div class="col-12">
-        <table id="accounts" class="table table-sm table-striped" data-bs-toggle="table"
-               data-locale="de-DE" data-mobile-responsive="true" data-min-width="1024">
+        <table id="accounts" class="table table-sm table-striped tbl-responsive">
             <thead>
                 <tr>
                     <th>{% trans 'Name' %}</th>
@@ -72,8 +72,8 @@ $(document).ready(function() {
             <tbody>
                 {% for path in path_list %}
                 <tr>
-                    <td>{{ path.name }}</td>
-                    <td>
+                    <td data-th="{% trans 'Name' %}">{{ path.name }}</td>
+                    <td data-th="{% trans 'Type' %}">
                         {% if path.type == 'dir' %}
                         <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" class="bi bi-folder" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                           <path d="M9.828 4a3 3 0 0 1-2.12-.879l-.83-.828A1 1 0 0 0 6.173 2H2.5a1 1 0 0 0-1 .981L1.546 4h-1L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3v1z"/>
@@ -85,7 +85,7 @@ $(document).ready(function() {
                         </svg>
                         {% endif %}
                     </td>
-                    <td>
+                    <td data-th="{% trans 'Path' %}">
                         {% if path.type == 'dir' %}
                             <a onclick="wip()" href="{% url 'repository:browse' object.id 'list' %}?id={{ snapshot.short_id }}&path={{ path.path }}">
                                 {{ path.path }}

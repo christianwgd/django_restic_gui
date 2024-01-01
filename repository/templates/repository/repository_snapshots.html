@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
-{% load i18n static bootstrap4 django_bootstrap_breadcrumbs %}
+{% load i18n static django_bootstrap5 django_bootstrap_breadcrumbs %}
 
-{% block bootstrap4_extra_head %}
+{% block bootstrap5_extra_head %}
 {{ block.super }}
 <link href="{% static 'repository/css/snapshots.css' %}" rel="stylesheet">
 <link href="{% static 'repository/css/modal.css' %}" rel="stylesheet">
@@ -10,7 +10,7 @@
 </style>
 {% endblock %}
 
-{% block bootstrap4_extra_script %}
+{% block bootstrap5_extra_script %}
 {{ block.super }}
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
 <script>
@@ -50,7 +50,7 @@ $(document).ready(function() {
             {% for snap in snapshots %}
             <div class="card">
                 <div class="card-header">
-                    <a class="card-link" data-toggle="collapse" href="#id_{{ snap.short_id }}">
+                    <a class="card-link" data-bs-toggle="collapse" href="#id_{{ snap.short_id }}">
                         {{ snap.timestamp|date:"DATETIME_FORMAT" }}
                     </a>
                     <br/>
@@ -60,7 +60,7 @@ $(document).ready(function() {
                         {% trans 'Host' %}: {{ snap.hostname }}
                     </small>
                 </div>
-                <div id="id_{{ snap.short_id }}" class="collapse" data-parent="#snapshots">
+                <div id="id_{{ snap.short_id }}" class="collapse" data-bs-parent="#snapshots">
                     {% for path in snap.paths %}
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">

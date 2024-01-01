@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'django_restic_gui',
     'bootstrap_modal_forms',
     'django_bootstrap_breadcrumbs',
-    'bootstrap4',
+    'django_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -101,8 +101,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 ##################
 # BOOTSTRAP 4    #
 ##################
-BOOTSTRAP4 = {
-    "include_jquery": True,
+BOOTSTRAP5 = {
 }
 
 LOGIN_REDIRECT_URL = '/'

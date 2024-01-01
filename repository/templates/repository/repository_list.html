@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
-{% load i18n static bootstrap4 django_bootstrap_breadcrumbs repo_tags %}
+{% load i18n static django_bootstrap5 django_bootstrap_breadcrumbs repo_tags %}
 
-{% block bootstrap4_extra_head %}
+{% block bootstrap5_extra_head %}
 {{ block.super }}
 <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table.min.css">
 <link rel="stylesheet" href="{% static 'repository/css/repolist.css' %}">
 {% endblock %}
 
-{% block bootstrap4_extra_script %}
+{% block bootstrap5_extra_script %}
 {{ block.super }}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment@^2"></script>
@@ -135,7 +135,7 @@ $(document).ready(function() {
 <div class="row">
     <div class="col-12">
         <div class="panel">
-            <table id="accounts" data-toggle="table" class="table table-striped table-bordered"
+            <table id="accounts" data-bs-toggle="table" class="table table-striped table-bordered"
                     data-locale="de-DE" data-mobile-responsive="true" data-min-width="768">
                 <thead>
                     <tr>

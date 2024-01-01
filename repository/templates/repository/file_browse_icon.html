@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
-{% load i18n static bootstrap4 django_bootstrap_breadcrumbs repo_tags file_type_tags %}
+{% load i18n static django_bootstrap5 django_bootstrap_breadcrumbs repo_tags file_type_tags %}
 
-{% block bootstrap4_extra_head %}
+{% block bootstrap5_extra_head %}
 {{ block.super }}
 <link href="{% static 'repository/css/view_switch.css' %}" rel="stylesheet">
 <link href="{% static 'repository/css/icon.css' %}" rel="stylesheet">
 <link href="{% static 'repository/css/modal.css' %}" rel="stylesheet">
 {% endblock %}
 
-{% block bootstrap4_extra_script %}
+{% block bootstrap5_extra_script %}
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
 <script>
 $(document).ready(function() {

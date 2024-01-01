@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load i18n bootstrap4 static %}
+{% load i18n django_bootstrap5 static %}
 
-{% block bootstrap4_extra_head %}
+{% block bootstrap5_extra_head %}
 {{ block.super }}
 <link href="{% static 'css/auth.css' %}" rel="stylesheet">
 {% endblock %}
@@ -24,11 +24,9 @@
         <form role="form" action="{{ app_path }}" method="post" id="login-form" novalidate>
             {% csrf_token %}
             {% bootstrap_form form %}
-            {% buttons %}
             <button type="submit" class="btn btn-primary">
                 {% trans 'Log in' %}
             </button>
-            {% endbuttons %}
         </form>
     </div>
 </div>

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
-{% load i18n static bootstrap4 django_bootstrap_breadcrumbs repo_tags file_type_tags %}
+{% load i18n static django_bootstrap5 django_bootstrap_breadcrumbs repo_tags file_type_tags %}
 
-{% block bootstrap4_extra_head %}
+{% block bootstrap5_extra_head %}
 {{ block.super }}
 <link href="{% static 'repository/css/view_switch.css' %}" rel="stylesheet">
 <link href="{% static 'repository/css/list.css' %}" rel="stylesheet">
@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table.min.css">
 {% endblock %}
 
-{% block bootstrap4_extra_script %}
+{% block bootstrap5_extra_script %}
 <script src="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table.min.js"></script>
 <script src="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table-locale-all.min.js"></script>
 <script src="https://unpkg.com/bootstrap-table@1.20.2/dist/extensions/mobile/bootstrap-table-mobile.min.js"></script>
@@ -58,7 +58,7 @@ $(document).ready(function() {
 
 <div class="row">
     <div class="col-12">
-        <table id="accounts" class="table table-sm table-striped" data-toggle="table"
+        <table id="accounts" class="table table-sm table-striped" data-bs-toggle="table"
                data-locale="de-DE" data-mobile-responsive="true" data-min-width="1024">
             <thead>
                 <tr>

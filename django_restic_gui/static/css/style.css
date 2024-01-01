@@ -7,3 +7,17 @@
     top: -10px;
     right: 15px;
 }
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+ol.breadcrumb {
+    background-color: #eee;
+    border-radius: .5rem;
+    padding: .5rem;
+}

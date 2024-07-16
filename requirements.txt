@@ -1,7 +1,7 @@
-Django==5.0.3
-django-bootstrap5==23.4
+Django==5.0.7
+django-bootstrap5==24.2
 django-bootstrap-breadcrumbs2==1.0.0
 django-bootstrap-modal-forms==3.0.4
 django-encrypted-json-fields==1.0.4
-humanize==4.9.0
+humanize==4.10.0
 python-dateutil==2.9.0.post0

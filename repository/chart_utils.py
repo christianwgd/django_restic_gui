@@ -1,4 +1,3 @@
-import colorsys
 from django.utils.translation import gettext_lazy as _
 from repository.models import RepoSize
 

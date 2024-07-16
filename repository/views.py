@@ -14,7 +14,6 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.http import FileResponse, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.formats import date_format
 from django.utils.text import slugify
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
 from django.utils.translation import gettext_lazy as _
@@ -102,7 +101,7 @@ class RepositoryList(LoginRequiredMixin, ListView):
         try:
             total, used, free = shutil.disk_usage(settings.LOCAL_BACKUP_PATH)
             ratio = int(used / total * 100)
-        except FileNotFoundError as e:
+        except FileNotFoundError:
             total, used, free = 0, 0, 0
             ratio = 0
         ctx['total'] = humanize.naturalsize(total, binary=False)
@@ -174,7 +173,7 @@ class RepositoryCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         if sudo:
             command.insert(0, 'sudo')
 
-        result = subprocess.run(command, stdout=subprocess.PIPE, env=my_env)
+        subprocess.run(command, stdout=subprocess.PIPE, env=my_env)
 
         form.instance.path = path
         return super(RepositoryCreate, self).form_valid(form)
@@ -227,23 +226,18 @@ class FileBrowse(LoginRequiredMixin, DetailView):
         results = result.stdout.decode(encoding='UTF-8').split('\n')
         pathlist = []
         for item in results:
-            try:
-                if item != '':
-                    json_item = json.loads(item, object_hook=lambda d: SimpleNamespace(**d))
-                    if json_item.struct_type == 'snapshot':
-                        snapshot = json_item
-                    elif json_item.struct_type == 'node':
-                        if path == json_item.path:
-                            delete_to(json_item.name)
-                            push(json_item.name, json_item.path)
-                        else:
-                            pathlist.append(json_item)
+            if item != '':
+                json_item = json.loads(item, object_hook=lambda d: SimpleNamespace(**d))
+                if json_item.struct_type == 'snapshot':
+                    snapshot = json_item
+                elif json_item.struct_type == 'node':
+                    if path == json_item.path:
+                        delete_to(json_item.name)
+                        push(json_item.name, json_item.path)
                     else:
-                        pass
-            except:
-                # import traceback
-                # traceback.print_exc()
-                pass
+                        pathlist.append(json_item)
+                else:
+                    pass
 
         ctx['snapshot'] = snapshot
         ctx['path_list'] = pathlist
@@ -328,7 +322,7 @@ class RestoreView(LoginRequiredMixin, BSModalFormView):
                     action='3',
                     data='{} --> {}'.format(source_path, dest_path)
                 )
-            result = restic_command(repo, command)
+            restic_command(repo, command)
             messages.success(self.request, msg)
         return redirect(self.get_success_url())
 
@@ -353,7 +347,7 @@ class BackupView(LoginRequiredMixin, DetailView):
         # backup path
         repo = self.get_object()
         command = ['restic', '-r', repo.path, 'backup', path]
-        result = restic_command(repo, command)
+        restic_command(repo, command)
         Journal.objects.create(
             user=self.request.user,
             repo=repo,
@@ -385,12 +379,12 @@ class NewBackupView(LoginRequiredMixin, BSModalFormView):
             # backup path
             repo = Repository.objects.get(pk=self.request.session['repo_id'])
             command = ['restic', '-r', repo.path, 'backup', path]
-            result = restic_command(repo, command)
+            restic_command(repo, command)
             Journal.objects.create(
                 user=self.request.user,
                 repo=repo,
                 action='1',
-                data='{} --> {}'.format(path)
+                data='{} --> {}'.format(path, repo.path)
             )
             messages.success(self.request,
                              _('Backup of {path} successfully completed'.format(
@@ -451,7 +445,7 @@ class Download(DetailView):
             'restic', '-r', repo.path, 'restore', snapshot_id,
             '--include', path, '--target', download_path
         ]
-        result = restic_command(repo, command)
+        restic_command(repo, command)
         Journal.objects.create(
             user=self.request.user,
             repo=repo,

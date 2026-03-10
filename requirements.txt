@@ -1,4 +1,4 @@
-Django==5.2.11
+Django==5.2.12
 django-bootstrap5==26.2
 django-bootstrap-breadcrumbs2==1.0.0
 django-bootstrap-modal-forms==3.0.5
